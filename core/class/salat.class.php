@@ -273,8 +273,36 @@ class salat extends eqLogic {
     }
   }
 
-  /*     * **********************Getteur Setteur*************************** */
-
+  public static function run($_options) {
+      $salat = salat::byId($_options['salat_id']);
+  		$next = $_options['next'];
+      $actual = $_options['actual'];
+      $nsalat = $salat->getCmd(null,$next);
+      $time = $nsalat->getConfiguration('value');
+      $alert = str_replace('#','',$salat->getConfiguration('alert'));
+      $command = str_replace('#','',$salat->getConfiguration('command'));
+  		$nexttext = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'nexttext');
+      $nexttext->setConfiguration('value', $next);
+      $nexttext->save();
+      $nexttext->event($next);
+      $nexttime = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'nexttime');
+      $nexttime->setConfiguration('value', $time);
+      $nexttext->save();
+      $nexttext->event($time);
+      if ($alert != '') {
+        $cmd = cmd::byId($alert);
+        if ($actual == 'imsak' || $actual == 'shurooq') {
+          $options['message'] = $actual . ', prière ' . $next . ' à ' . substr_replace($time,':',-2,0);
+        } else {
+          $options['message'] = 'Adzan pour ' . $actual . ', prochaine prière ' . $next . ' à ' . substr_replace($time,':',-2,0);
+        }
+        $cmd->execCmd($options);
+      }
+      if ($command != '') {
+        $cmd = cmd::byId($command);
+        $cmd->execCmd();
+      }
+  	}
 
   public function toHtml($_version = 'dashboard') {
     $_version = jeedom::versionAlias($_version);
@@ -518,6 +546,16 @@ class salat extends eqLogic {
         $cmd->save();
         $cmd->event($imsak);
         log::add('salat', 'debug', 'imsak ' . $imsak);
+        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'actual' => 'imsak','next' => 'fajr'));
+        if (!is_object($cron)) {
+          $cron = new cron();
+          $cron->setClass('salat');
+          $cron->setFunction('run');
+          $cron->setOption(array('salat_id' => intval($this->getId()),'actual' => 'imsak','next' => 'fajr'));
+        }
+        $next = strtotime(substr_replace($imsak,':',-2,0));
+        $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
+        $cron->save();
       }elseif($cmd->getConfiguration('data')=="imsak1"){
         $cmd->setConfiguration('value', $imsak1);
         $cmd->save();
@@ -528,6 +566,16 @@ class salat extends eqLogic {
         $cmd->save();
         $cmd->event($fajr);
         log::add('salat', 'debug', 'fajr ' . $fajr);
+        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'actual' => 'fajr','next' => 'shurooq'));
+        if (!is_object($cron)) {
+          $cron = new cron();
+          $cron->setClass('salat');
+          $cron->setFunction('run');
+          $cron->setOption(array('salat_id' => intval($this->getId()),'actual' => 'fajr','next' => 'shurooq'));
+        }
+        $next = strtotime(substr_replace($fajr,':',-2,0));
+        $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
+        $cron->save();
       }elseif($cmd->getConfiguration('data')=="fajr1"){
         $cmd->setConfiguration('value', $fajr1);
         $cmd->save();
@@ -538,26 +586,76 @@ class salat extends eqLogic {
         $cmd->save();
         $cmd->event($shurooq);
         log::add('salat', 'debug', 'shurooq ' . $shurooq);
+        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'actual' => 'shurooq','next' => 'dhuhr'));
+        if (!is_object($cron)) {
+          $cron = new cron();
+          $cron->setClass('salat');
+          $cron->setFunction('run');
+          $cron->setOption(array('salat_id' => intval($this->getId()),'actual' => 'shurooq','next' => 'dhuhr'));
+        }
+        $next = strtotime(substr_replace($shurooq,':',-2,0));
+        $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
+        $cron->save();
       }elseif($cmd->getConfiguration('data')=="dhuhr"){
         $cmd->setConfiguration('value', $dhuhr);
         $cmd->save();
         $cmd->event($dhuhr);
         log::add('salat', 'debug', 'dhuhr ' . $dhuhr);
+        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'actual' => 'dhuhr','next' => 'asr'));
+        if (!is_object($cron)) {
+          $cron = new cron();
+          $cron->setClass('salat');
+          $cron->setFunction('run');
+          $cron->setOption(array('salat_id' => intval($this->getId()),'actual' => 'dhuhr','next' => 'asr'));
+        }
+        $next = strtotime(substr_replace($dhuhr,':',-2,0));
+        $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
+        $cron->save();
       }elseif($cmd->getConfiguration('data')=="asr"){
         $cmd->setConfiguration('value', $asr);
         $cmd->save();
         $cmd->event($asr);
         log::add('salat', 'debug', 'asr ' . $asr);
+        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'actual' => 'asr','next' => 'maghrib'));
+        if (!is_object($cron)) {
+          $cron = new cron();
+          $cron->setClass('salat');
+          $cron->setFunction('run');
+          $cron->setOption(array('salat_id' => intval($this->getId()),'actual' => 'asr','next' => 'maghrib'));
+        }
+        $next = strtotime(substr_replace($asr,':',-2,0));
+        $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
+        $cron->save();
       }elseif($cmd->getConfiguration('data')=="maghrib"){
         $cmd->setConfiguration('value', $maghrib);
         $cmd->save();
         $cmd->event($maghrib);
         log::add('salat', 'debug', 'maghrib ' . $maghrib);
+        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'actual' => 'maghrib','next' => 'isha'));
+        if (!is_object($cron)) {
+          $cron = new cron();
+          $cron->setClass('salat');
+          $cron->setFunction('run');
+          $cron->setOption(array('salat_id' => intval($this->getId()),'actual' => 'maghrib','next' => 'isha'));
+        }
+        $next = strtotime(substr_replace($maghrib,':',-2,0));
+        $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
+        $cron->save();
       }elseif($cmd->getConfiguration('data')=="isha"){
         $cmd->setConfiguration('value', $isha);
         $cmd->save();
         $cmd->event($isha);
         log::add('salat', 'debug', 'isha ' . $isha);
+        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'isha' => 'fajr','next' => 'imsak'));
+        if (!is_object($cron)) {
+          $cron = new cron();
+          $cron->setClass('salat');
+          $cron->setFunction('run');
+          $cron->setOption(array('salat_id' => intval($this->getId()),'isha' => 'fajr','next' => 'imsak'));
+        }
+        $next = strtotime(substr_replace($isha,':',-2,0));
+        $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
+        $cron->save();
       }elseif($cmd->getConfiguration('data')=="qibla"){
         $cmd->setConfiguration('value', $qibla);
         $cmd->save();
