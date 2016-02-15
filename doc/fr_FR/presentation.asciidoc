@@ -1,0 +1,10 @@
+==== Salat, calendrier musulman
+
+Le plugin permet de récpérer les informations suivantes d'un lieu :
+
+ * Date du jour au calendrier Hijra
+ * Evènement si c'est un jour spécial (Idul, début de l'année ...)
+ * Qibla
+ * Imsak du jour et du lendemain
+ * Fajr du jour et du lendemain
+ * Dhur, Asr, Maghrib et Isha du jour
