@@ -14,6 +14,17 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
+ $('#bt_selectMailCmd').on('click', function () {
+     jeedom.cmd.getSelectModal({cmd: {type: 'action', subType: 'message'}}, function (result) {
+         $('.eqLogicAttr[data-l2key=alert]').atCaret('insert', result.human);
+     });
+ });
+
+ $('#bt_selectActCmd').on('click', function () {
+     jeedom.cmd.getSelectModal({cmd: {type: 'action'}}, function (result) {
+         $('.eqLogicAttr[data-l2key=command]').atCaret('insert', result.human);
+     });
+ });
 
 $("#table_cmd").delegate(".listEquipementInfo", 'click', function() {
     var el = $(this);
