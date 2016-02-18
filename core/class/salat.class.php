@@ -293,7 +293,9 @@ class salat extends eqLogic {
       if ($alert != '') {
         if ($actual == 'Imsak' || $actual == 'Shurooq') {
           $options['message'] = $actual . ', salat ' . $next . ' : ' . substr_replace($time,':',-2,0);
-        } else {
+        } else if ($next == 'Imsak' || $next == 'Shurooq'){
+          $options['message'] = 'Salat ' . $actual . ', ' . $next . ' : ' . substr_replace($time,':',-2,0);
+        } else {}
           $options['message'] = 'Salat ' . $actual . ', salat ' . $next . ' : ' . substr_replace($time,':',-2,0);
         }
         if (strpos($alert,'&&') !== false) {
