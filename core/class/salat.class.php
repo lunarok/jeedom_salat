@@ -41,24 +41,27 @@ class salat extends eqLogic {
 
   public static function cronDaily() {
     foreach (eqLogic::byType('salat') as $salat) {
-      log::add('salat', 'info', 'Calcul des horaires');
-      $salat->getInformations();
-      $mc = cache::byKey('salatWidgetdashboard' . $salat->getId());
-      $mc->remove();
-      $salat->toHtml('dashboard');
-      $salat->refreshWidget();
+      if (null !== ($salat->getConfiguration('geoloc', ''))) {
+        log::add('salat', 'info', 'Calcul des horaires');
+        $salat->getInformations();
+        $mc = cache::byKey('salatWidgetdashboard' . $salat->getId());
+        $mc->remove();
+        $salat->toHtml('dashboard');
+        $salat->refreshWidget();
+      }
     }
   }
 
   public static function start($_options) {
     foreach (eqLogic::byType('salat') as $salat) {
-      log::add('salat', 'info', 'Calcul des horaires');
-      $salat->getInformations();
-      $mc = cache::byKey('salatWidgetdashboard' . $salat->getId());
-      $mc->remove();
-      $salat->toHtml('dashboard');
-      $salat->refreshWidget();
-
+      if (null !== ($salat->getConfiguration('geoloc', ''))) {
+        log::add('salat', 'info', 'Calcul des horaires');
+        $salat->getInformations();
+        $mc = cache::byKey('salatWidgetdashboard' . $salat->getId());
+        $mc->remove();
+        $salat->toHtml('dashboard');
+        $salat->refreshWidget();
+      }
     }
 
   }
