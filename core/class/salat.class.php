@@ -224,6 +224,30 @@ class salat extends eqLogic {
       $salatCmd->setSubType('string');
       $salatCmd->save();
 
+      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'day');
+      if (!is_object($salatCmd)) {
+        $salatCmd = new salatCmd();
+        $salatCmd->setName(__('Jour', __FILE__));
+        $salatCmd->setEqLogic_id($this->id);
+        $salatCmd->setLogicalId('day');
+        $salatCmd->setConfiguration('data', 'day');
+        $salatCmd->setType('info');
+      }
+      $salatCmd->setSubType('string');
+      $salatCmd->save();
+
+      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'month');
+      if (!is_object($salatCmd)) {
+        $salatCmd = new salatCmd();
+        $salatCmd->setName(__('Mois', __FILE__));
+        $salatCmd->setEqLogic_id($this->id);
+        $salatCmd->setLogicalId('month');
+        $salatCmd->setConfiguration('data', 'month');
+        $salatCmd->setType('info');
+      }
+      $salatCmd->setSubType('string');
+      $salatCmd->save();
+
       $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'event');
       if (!is_object($salatCmd)) {
         $salatCmd = new salatCmd();
@@ -263,7 +287,7 @@ class salat extends eqLogic {
       $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'nexttime');
       if (!is_object($salatCmd)) {
         $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Prochain Prière Heure', __FILE__));
+        $salatCmd->setName(__('Prochaine Prière Heure', __FILE__));
         $salatCmd->setEqLogic_id($this->id);
         $salatCmd->setLogicalId('nexttime');
         $salatCmd->setConfiguration('data', 'nexttime');
@@ -278,54 +302,15 @@ class salat extends eqLogic {
 
   public static function run($_options) {
       $salat = salat::byId($_options['salat_id']);
-  		$next = $_options['next'];
-      $actual = $_options['actual'];
-      $nsalat = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),strtolower($next));
-      $time = $nsalat->getConfiguration('value');
-      log::add('salat', 'debug', 'time ' . $time);
-      $alert = str_replace('#','',$salat->getConfiguration('alert'));
-      $command = str_replace('#','',$salat->getConfiguration('command'));
   		$nexttext = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'nexttext');
-      $nexttext->setConfiguration('value', $next);
+      $nexttext->setConfiguration('value', $_options['actual']);
       $nexttext->save();
-      $nexttext->event($next);
+      $nexttext->event($_options['actual']);
       $nexttime = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'nexttime');
-      $nexttime->setConfiguration('value', $time);
+      $nexttime->setConfiguration('value', $_options['time']);
       $nexttext->save();
-      $nexttext->event($time);
-      if ($alert != '') {
-        if ($actual == 'Imsak' || $actual == 'Shurooq') {
-          $options['message'] = $actual . ', salat ' . $next . ' : ' . substr_replace($time,':',-2,0);
-        } else if ($next == 'Imsak' || $next == 'Shurooq'){
-          $options['message'] = 'Salat ' . $actual . ', ' . $next . ' : ' . substr_replace($time,':',-2,0);
-        } else {
-          $options['message'] = 'Salat ' . $actual . ', salat ' . $next . ' : ' . substr_replace($time,':',-2,0);
-        }
-        if (strpos($alert,'&&') !== false) {
-          $cmds = explode('&&',$command);
-          foreach ($cmds as $cmd) {
-            $cmd = cmd::byId($command);
-            $cmd->execCmd($options);
-          }
-        } else {
-          $cmd = cmd::byId($alert);
-          $cmd->execCmd($options);
-        }
+      $nexttext->event($_options['time']);
 
-      }
-      if ($command != '' && $actual != 'Imsak' && $actual != 'Shurooq') {
-        if (strpos($command,'&&') !== false) {
-          $cmds = explode('&&',$command);
-          foreach ($cmds as $cmd) {
-            $cmd = cmd::byId($command);
-            $cmd->execCmd();
-          }
-        } else {
-          $cmd = cmd::byId($command);
-          $cmd->execCmd();
-        }
-
-      }
   	}
 
   public function toHtml($_version = 'dashboard') {
@@ -498,25 +483,27 @@ class salat extends eqLogic {
     $nQibla = explode('°', $tQibla[1]);
     $qibla = $nQibla[0];
 
-    exec('idate --latitude ' . $latitude . ' --longitude ' . $longitude . ' -a ' . $method . ' --fajrangle ' . $fajr . ' --ishaangle ' . $isha . ' --dst ' . $dst, $idate);
-    $iJour = $idate[3];
-    $tJour = explode(' : ', $iJour);
-    $date = $tJour[1];
+    exec('idate --simple --latitude ' . $latitude . ' --longitude ' . $longitude . ' -a ' . $method . ' --fajrangle ' . $fajr . ' --ishaangle ' . $isha . ' --dst ' . $dst, $idate);
+    $date = $idate[0];
 
-    if (isset($idate[5])) {
-      $iEvent = $idate[5];
+    if (isset($idate[3])) {
+      $iEvent = $idate[3];
       $tEvent = explode(' : ', $iEvent);
       $event = $tEvent[1];
     }else {
       $event = 'Aucun';
     }
 
+    $detail = explode('/', $date);
+    $jour = $detail[0];
+    $mois = $detail[1];
+
     $tomorrow = mktime(0, 0, 0, date("m"), date("d")+1, date("y"));
     $tom1 = date("Ymd", $tomorrow);
-    exec('idate --gregorian ' . $tom1 . ' --latitude ' . $latitude . ' --longitude ' . $longitude . ' -a ' . $method . ' --fajrangle ' . $fajr . ' --ishaangle ' . $isha . ' --dst ' . $dst, $idate1);
+    exec('idate --simple --gregorian ' . $tom1 . ' --latitude ' . $latitude . ' --longitude ' . $longitude . ' -a ' . $method . ' --fajrangle ' . $fajr . ' --ishaangle ' . $isha . ' --dst ' . $dst, $idate1);
 
-    if (isset($idate1[5])) {
-      $iEvent1 = $idate1[5];
+    if (isset($idate1[3])) {
+      $iEvent1 = $idate1[3];
       $tEvent1 = explode(' : ', $iEvent1);
       $event1 = $tEvent1[1];
     }else {
@@ -563,6 +550,25 @@ class salat extends eqLogic {
     log::add('salat', 'info', 'getInformations');
 
 
+    $actual =  date('Hi');
+    $nexttime = $fajr1;
+    $nexttext = 'Fajr';
+    if ($fajr <= $actual && $actual < $dhuhr) {
+      $nexttime = $dhuhr;
+      $nexttext = 'Dhuhr';
+    }
+    if ($dhuhr <= $actual && $actual < $asr) {
+      $nexttime = $asr;
+      $nexttext = 'Asr';
+    }
+    if ($asr <= $actual && $actual < $maghrib) {
+      $nexttime = $maghrib;
+      $nexttext = 'Maghrib';
+    }
+    if ($maghrib <= $actual && $actual < $isha) {
+      $nexttime = $isha;
+      $nexttext = 'Isha';
+    }
 
     foreach ($this->getCmd() as $cmd) {
       if($cmd->getConfiguration('data')=="imsak"){
@@ -570,16 +576,6 @@ class salat extends eqLogic {
         $cmd->save();
         $cmd->event($imsak);
         log::add('salat', 'debug', 'imsak ' . $imsak);
-        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'actual' => 'Imsak','next' => 'Fajr'));
-        if (!is_object($cron)) {
-          $cron = new cron();
-          $cron->setClass('salat');
-          $cron->setFunction('run');
-          $cron->setOption(array('salat_id' => intval($this->getId()),'actual' => 'Imsak','next' => 'Fajr'));
-        }
-        $next = strtotime(substr_replace($imsak,':',-2,0));
-        $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
-        $cron->save();
       }elseif($cmd->getConfiguration('data')=="imsak1"){
         $cmd->setConfiguration('value', $imsak1);
         $cmd->save();
@@ -590,12 +586,12 @@ class salat extends eqLogic {
         $cmd->save();
         $cmd->event($fajr);
         log::add('salat', 'debug', 'fajr ' . $fajr);
-        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'actual' => 'Fajr','next' => 'Shurooq'));
+        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $dhuhr,'next' => 'Dhuhr'));
         if (!is_object($cron)) {
           $cron = new cron();
           $cron->setClass('salat');
           $cron->setFunction('run');
-          $cron->setOption(array('salat_id' => intval($this->getId()),'actual' => 'Fajr','next' => 'Shurooq'));
+          $cron->setOption(array('salat_id' => intval($this->getId()),'time' => $dhuhr,'next' => 'Dhuhr'));
         }
         $next = strtotime(substr_replace($fajr,':',-2,0));
         $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
@@ -610,27 +606,17 @@ class salat extends eqLogic {
         $cmd->save();
         $cmd->event($shurooq);
         log::add('salat', 'debug', 'shurooq ' . $shurooq);
-        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'actual' => 'Shurooq','next' => 'Dhuhr'));
-        if (!is_object($cron)) {
-          $cron = new cron();
-          $cron->setClass('salat');
-          $cron->setFunction('run');
-          $cron->setOption(array('salat_id' => intval($this->getId()),'actual' => 'Shurooq','next' => 'Dhuhr'));
-        }
-        $next = strtotime(substr_replace($shurooq,':',-2,0));
-        $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
-        $cron->save();
       }elseif($cmd->getConfiguration('data')=="dhuhr"){
         $cmd->setConfiguration('value', $dhuhr);
         $cmd->save();
         $cmd->event($dhuhr);
         log::add('salat', 'debug', 'dhuhr ' . $dhuhr);
-        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'actual' => 'Dhuhr','next' => 'Asr'));
+        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $asr,'next' => 'Asr'));
         if (!is_object($cron)) {
           $cron = new cron();
           $cron->setClass('salat');
           $cron->setFunction('run');
-          $cron->setOption(array('salat_id' => intval($this->getId()),'actual' => 'Dhuhr','next' => 'Asr'));
+          $cron->setOption(array('salat_id' => intval($this->getId()),'time' => $asr,'next' => 'Asr'));
         }
         $next = strtotime(substr_replace($dhuhr,':',-2,0));
         $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
@@ -640,12 +626,12 @@ class salat extends eqLogic {
         $cmd->save();
         $cmd->event($asr);
         log::add('salat', 'debug', 'asr ' . $asr);
-        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'actual' => 'Asr','next' => 'Maghrib'));
+        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $maghrib,'next' => 'Maghrib'));
         if (!is_object($cron)) {
           $cron = new cron();
           $cron->setClass('salat');
           $cron->setFunction('run');
-          $cron->setOption(array('salat_id' => intval($this->getId()),'actual' => 'Asr','next' => 'Maghrib'));
+          $cron->setOption(array('salat_id' => intval($this->getId()),'time' => $maghrib,'next' => 'Maghrib'));
         }
         $next = strtotime(substr_replace($asr,':',-2,0));
         $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
@@ -655,12 +641,12 @@ class salat extends eqLogic {
         $cmd->save();
         $cmd->event($maghrib);
         log::add('salat', 'debug', 'maghrib ' . $maghrib);
-        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'actual' => 'Maghrib','next' => 'Isha'));
+        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $isha,'next' => 'Isha'));
         if (!is_object($cron)) {
           $cron = new cron();
           $cron->setClass('salat');
           $cron->setFunction('run');
-          $cron->setOption(array('salat_id' => intval($this->getId()),'actual' => 'Maghrib','next' => 'Isha'));
+          $cron->setOption(array('salat_id' => intval($this->getId()),'time' => $isha,'next' => 'Isha'));
         }
         $next = strtotime(substr_replace($maghrib,':',-2,0));
         $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
@@ -670,12 +656,12 @@ class salat extends eqLogic {
         $cmd->save();
         $cmd->event($isha);
         log::add('salat', 'debug', 'isha ' . $isha);
-        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'actual' => 'Isha','next' => 'Imsak'));
+        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $fajr1,'next' => 'Fajr'));
         if (!is_object($cron)) {
           $cron = new cron();
           $cron->setClass('salat');
           $cron->setFunction('run');
-          $cron->setOption(array('salat_id' => intval($this->getId()),'actual' => 'isha','next' => 'Imsak'));
+          $cron->setOption(array('salat_id' => intval($this->getId()),'time' => $fajr1,'next' => 'Fajr'));
         }
         $next = strtotime(substr_replace($isha,':',-2,0));
         $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
@@ -690,6 +676,16 @@ class salat extends eqLogic {
         $cmd->save();
         $cmd->event($date);
         log::add('salat', 'debug', 'date ' . $date);
+      }elseif($cmd->getConfiguration('data')=="day"){
+        $cmd->setConfiguration('value', $jour);
+        $cmd->save();
+        $cmd->event($jour);
+        log::add('salat', 'debug', 'day ' . $jour);
+      }elseif($cmd->getConfiguration('data')=="month"){
+        $cmd->setConfiguration('value', $mois);
+        $cmd->save();
+        $cmd->event($mois);
+        log::add('salat', 'debug', 'month ' . $mois);
       }elseif($cmd->getConfiguration('data')=="event"){
         $cmd->setConfiguration('value', $event);
         $cmd->save();
@@ -700,13 +696,22 @@ class salat extends eqLogic {
         $cmd->save();
         $cmd->event($event1);
         log::add('salat', 'debug', 'event1 ' . $event1);
+      }elseif($cmd->getConfiguration('data')=="event1"){
+        $cmd->setConfiguration('value', $event1);
+        $cmd->save();
+        $cmd->event($event1);
+        log::add('salat', 'debug', 'event1 ' . $event1);
+      }elseif($cmd->getConfiguration('data')=="nexttext"){
+        $cmd->setConfiguration('value', $nexttext);
+        $cmd->save();
+        $cmd->event($nexttext);
+        log::add('salat', 'debug', 'nexttext ' . $nexttext);
+      }elseif($cmd->getConfiguration('data')=="nexttime"){
+        $cmd->setConfiguration('value', $nexttime);
+        $cmd->save();
+        $cmd->event($nexttime);
+        log::add('salat', 'debug', 'nexttime ' . $nexttime);
       }
-    }
-    $alert = str_replace('#','',$this->getConfiguration('alert'));
-    if ($alert != '') {
-      $cmd = cmd::byId($alert);
-      $options['message'] = 'Imsak ' . substr_replace($imsak,':',-2,0) . ', Fajr ' . substr_replace($fajr,':',-2,0) . ', Shurooq ' . substr_replace($shurooq,':',-2,0) . ', Dhuhr ' . substr_replace($dhuhr,':',-2,0) . ', Asr ' . substr_replace($asr,':',-2,0) . ', Maghrib ' . substr_replace($maghrib,':',-2,0) . ', Isha ' . substr_replace($isha,':',-2,0);
-      $cmd->execCmd($options);
     }
     return ;
   }
