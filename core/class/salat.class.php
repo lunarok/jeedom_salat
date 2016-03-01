@@ -233,7 +233,7 @@ class salat extends eqLogic {
         $salatCmd->setConfiguration('data', 'day');
         $salatCmd->setType('info');
       }
-      $salatCmd->setSubType('string');
+      $salatCmd->setSubType('numeric');
       $salatCmd->save();
 
       $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'month');
@@ -245,7 +245,7 @@ class salat extends eqLogic {
         $salatCmd->setConfiguration('data', 'month');
         $salatCmd->setType('info');
       }
-      $salatCmd->setSubType('string');
+      $salatCmd->setSubType('numeric');
       $salatCmd->save();
 
       $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'event');
@@ -551,7 +551,7 @@ class salat extends eqLogic {
 
 
     $actual =  date('Hi');
-    $nexttime = $fajr1;
+    $nexttime = $fajr;
     $nexttext = 'Fajr';
     if ($fajr <= $actual && $actual < $dhuhr) {
       $nexttime = $dhuhr;
@@ -568,6 +568,10 @@ class salat extends eqLogic {
     if ($maghrib <= $actual && $actual < $isha) {
       $nexttime = $isha;
       $nexttext = 'Isha';
+    }
+    if ($isha <= $actual && $actual <= 2359) {
+      $nexttime = $fajr1;
+      $nexttext = 'Fajr';
     }
 
     foreach ($this->getCmd() as $cmd) {
