@@ -547,49 +547,46 @@ class salat extends eqLogic {
       $isha = $isha + 100;
     }
 
-    log::add('salat', 'info', 'getInformations');
+    log::add('salat', 'info', 'getInformations ' . $imsak . ' ' . $fajr . ' ' . $shurooq . ' ' . $dhuhr . ' ' . $asr . ' ' . $maghrib . ' ' . $isha . ' ' .  $imsak1 . ' ' . $fajr1);
 
 
     $actual =  date('Hi');
-    $nexttime = $fajr;
-    $nexttext = 'Fajr';
-    if ($fajr <= $actual && $actual < $dhuhr) {
-      $nexttime = $dhuhr;
-      $nexttext = 'Dhuhr';
-    }
-    if ($dhuhr <= $actual && $actual < $asr) {
-      $nexttime = $asr;
-      $nexttext = 'Asr';
-    }
-    if ($asr <= $actual && $actual < $maghrib) {
-      $nexttime = $maghrib;
-      $nexttext = 'Maghrib';
-    }
-    if ($maghrib <= $actual && $actual < $isha) {
-      $nexttime = $isha;
-      $nexttext = 'Isha';
-    }
-    if ($isha <= $actual && $actual <= 2359) {
+
+    if ($isha <= $actual) {
       $nexttime = $fajr1;
       $nexttext = 'Fajr';
+    } elseif ($maghrib <= $actual) {
+      $nexttime = $isha;
+      $nexttext = 'Isha';
+    } elseif ($asr <= $actual) {
+      $nexttime = $maghrib;
+      $nexttext = 'Maghrib';
+    } elseif ($dhuhr <= $actual) {
+      $nexttime = $asr;
+      $nexttext = 'Asr';
+    } elseif ($fajr <= $actual) {
+      $nexttime = $dhuhr;
+      $nexttext = 'Dhuhr';
+    } else {
+      $nexttime = $fajr;
+      $nexttext = 'Fajr';
     }
+
+    log::add('salat', 'debug', 'actual ' . $actual . ' next ' . $nexttime);
 
     foreach ($this->getCmd() as $cmd) {
       if($cmd->getConfiguration('data')=="imsak"){
         $cmd->setConfiguration('value', $imsak);
         $cmd->save();
         $cmd->event($imsak);
-        log::add('salat', 'debug', 'imsak ' . $imsak);
       }elseif($cmd->getConfiguration('data')=="imsak1"){
         $cmd->setConfiguration('value', $imsak1);
         $cmd->save();
         $cmd->event($imsak1);
-        log::add('salat', 'debug', 'imsak1 ' . $imsak1);
       }elseif($cmd->getConfiguration('data')=="fajr"){
         $cmd->setConfiguration('value', $fajr);
         $cmd->save();
         $cmd->event($fajr);
-        log::add('salat', 'debug', 'fajr ' . $fajr);
         $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $dhuhr,'next' => 'Dhuhr'));
         if (!is_object($cron)) {
           $cron = new cron();
@@ -604,17 +601,14 @@ class salat extends eqLogic {
         $cmd->setConfiguration('value', $fajr1);
         $cmd->save();
         $cmd->event($fajr1);
-        log::add('salat', 'debug', 'fajr1 ' . $fajr1);
       }elseif($cmd->getConfiguration('data')=="shurooq"){
         $cmd->setConfiguration('value', $shurooq);
         $cmd->save();
         $cmd->event($shurooq);
-        log::add('salat', 'debug', 'shurooq ' . $shurooq);
       }elseif($cmd->getConfiguration('data')=="dhuhr"){
         $cmd->setConfiguration('value', $dhuhr);
         $cmd->save();
         $cmd->event($dhuhr);
-        log::add('salat', 'debug', 'dhuhr ' . $dhuhr);
         $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $asr,'next' => 'Asr'));
         if (!is_object($cron)) {
           $cron = new cron();
@@ -629,7 +623,6 @@ class salat extends eqLogic {
         $cmd->setConfiguration('value', $asr);
         $cmd->save();
         $cmd->event($asr);
-        log::add('salat', 'debug', 'asr ' . $asr);
         $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $maghrib,'next' => 'Maghrib'));
         if (!is_object($cron)) {
           $cron = new cron();
@@ -644,7 +637,6 @@ class salat extends eqLogic {
         $cmd->setConfiguration('value', $maghrib);
         $cmd->save();
         $cmd->event($maghrib);
-        log::add('salat', 'debug', 'maghrib ' . $maghrib);
         $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $isha,'next' => 'Isha'));
         if (!is_object($cron)) {
           $cron = new cron();
@@ -659,7 +651,6 @@ class salat extends eqLogic {
         $cmd->setConfiguration('value', $isha);
         $cmd->save();
         $cmd->event($isha);
-        log::add('salat', 'debug', 'isha ' . $isha);
         $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $fajr1,'next' => 'Fajr'));
         if (!is_object($cron)) {
           $cron = new cron();
@@ -674,47 +665,38 @@ class salat extends eqLogic {
         $cmd->setConfiguration('value', $qibla);
         $cmd->save();
         $cmd->event($qibla);
-        log::add('salat', 'debug', 'qibla ' . $qibla);
       }elseif($cmd->getConfiguration('data')=="date"){
         $cmd->setConfiguration('value', $date);
         $cmd->save();
         $cmd->event($date);
-        log::add('salat', 'debug', 'date ' . $date);
       }elseif($cmd->getConfiguration('data')=="day"){
         $cmd->setConfiguration('value', $jour);
         $cmd->save();
         $cmd->event($jour);
-        log::add('salat', 'debug', 'day ' . $jour);
       }elseif($cmd->getConfiguration('data')=="month"){
         $cmd->setConfiguration('value', $mois);
         $cmd->save();
         $cmd->event($mois);
-        log::add('salat', 'debug', 'month ' . $mois);
       }elseif($cmd->getConfiguration('data')=="event"){
         $cmd->setConfiguration('value', $event);
         $cmd->save();
         $cmd->event($event);
-        log::add('salat', 'debug', 'event ' . $event);
       }elseif($cmd->getConfiguration('data')=="event1"){
         $cmd->setConfiguration('value', $event1);
         $cmd->save();
         $cmd->event($event1);
-        log::add('salat', 'debug', 'event1 ' . $event1);
       }elseif($cmd->getConfiguration('data')=="event1"){
         $cmd->setConfiguration('value', $event1);
         $cmd->save();
         $cmd->event($event1);
-        log::add('salat', 'debug', 'event1 ' . $event1);
       }elseif($cmd->getConfiguration('data')=="nexttext"){
         $cmd->setConfiguration('value', $nexttext);
         $cmd->save();
         $cmd->event($nexttext);
-        log::add('salat', 'debug', 'nexttext ' . $nexttext);
       }elseif($cmd->getConfiguration('data')=="nexttime"){
         $cmd->setConfiguration('value', $nexttime);
         $cmd->save();
         $cmd->event($nexttime);
-        log::add('salat', 'debug', 'nexttime ' . $nexttime);
       }
     }
     return ;
