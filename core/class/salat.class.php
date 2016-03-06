@@ -303,9 +303,9 @@ class salat extends eqLogic {
   public static function run($_options) {
       $salat = salat::byId($_options['salat_id']);
   		$nexttext = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'nexttext');
-      $nexttext->setConfiguration('value', $_options['actual']);
+      $nexttext->setConfiguration('value', $_options['next']);
       $nexttext->save();
-      $nexttext->event($_options['actual']);
+      $nexttext->event($_options['next']);
       $nexttime = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'nexttime');
       $nexttime->setConfiguration('value', $_options['time']);
       $nexttext->save();
