@@ -471,6 +471,7 @@ class salat extends eqLogic {
     $fajr1 = str_replace(':','',str_replace(' ','',$tFajr1[1]));
     //-5mn pour UOIF
     if ($uoif = "1") {
+      $modulo = $fajr1 % 100;
       if ($modulo < 5) {
         $fajr1 = $fajr1 - 45;
       }else {
@@ -550,21 +551,22 @@ class salat extends eqLogic {
     log::add('salat', 'info', 'getInformations ' . $imsak . ' ' . $fajr . ' ' . $shurooq . ' ' . $dhuhr . ' ' . $asr . ' ' . $maghrib . ' ' . $isha . ' ' .  $imsak1 . ' ' . $fajr1);
 
 
-    $actual =  date('Hi');
+    $actual = date('Hi');
+    $actual = 1500;
 
-    if ($isha <= $actual) {
+    if (intval($isha) <= $actual) {
       $nexttime = $fajr1;
       $nexttext = 'Fajr';
-    } elseif ($maghrib <= $actual) {
+    } elseif (intval($maghrib) <= $actual) {
       $nexttime = $isha;
       $nexttext = 'Isha';
-    } elseif ($asr <= $actual) {
+    } elseif (intval($asr) <= $actual) {
       $nexttime = $maghrib;
       $nexttext = 'Maghrib';
-    } elseif ($dhuhr <= $actual) {
+    } elseif (intval($dhuhr) <= $actual) {
       $nexttime = $asr;
       $nexttext = 'Asr';
-    } elseif ($fajr <= $actual) {
+    } elseif (intval($fajr) <= $actual) {
       $nexttime = $dhuhr;
       $nexttext = 'Dhuhr';
     } else {
