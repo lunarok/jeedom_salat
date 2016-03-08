@@ -301,6 +301,7 @@ class salat extends eqLogic {
   }
 
   public static function run($_options) {
+    log::add('salat', 'debug', 'Cron : ' . $_options['salat_id'] . ' ' . $_options['next'] . ' ' . $_options['time']);
       $salat = salat::byId($_options['salat_id']);
   		$nexttext = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'nexttext');
       $nexttext->setConfiguration('value', $_options['next']);
@@ -552,7 +553,6 @@ class salat extends eqLogic {
 
 
     $actual = date('Hi');
-    $actual = 1500;
 
     if (intval($isha) <= $actual) {
       $nexttime = $fajr1;
