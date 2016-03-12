@@ -302,17 +302,17 @@ class salat extends eqLogic {
 
   public static function run($_options) {
     log::add('salat', 'debug', 'Cron : ' . $_options['salat_id'] . ' ' . $_options['next'] . ' ' . $_options['time']);
-      $salat = salat::byId($_options['salat_id']);
-  		$nexttext = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'nexttext');
-      $nexttext->setConfiguration('value', $_options['next']);
-      $nexttext->save();
-      $nexttext->event($_options['next']);
-      $nexttime = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'nexttime');
-      $nexttime->setConfiguration('value', $_options['time']);
-      $nexttext->save();
-      $nexttext->event($_options['time']);
+    $salat = salat::byId($_options['salat_id']);
+    $nexttext = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'nexttext');
+    $nexttext->setConfiguration('value', $_options['next']);
+    $nexttext->save();
+    $nexttext->event($_options['next']);
+    $nexttime = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'nexttime');
+    $nexttime->setConfiguration('value', $_options['time']);
+    $nexttime->save();
+    $nexttime->event($_options['time']);
 
-  	}
+  }
 
   public function toHtml($_version = 'dashboard') {
     $_version = jeedom::versionAlias($_version);
@@ -515,14 +515,14 @@ class salat extends eqLogic {
     $decalage = 0;
     if (date('H')>'2') {
       if (date('I', time())) {
-              if (!date('I', time() + (4 * 60 * 60))) {
-                      $decalage = -1;
-              }
+        if (!date('I', time() + (4 * 60 * 60))) {
+          $decalage = -1;
+        }
       }
       else {
-              if (date('I', time() + (4 * 60 * 60))) {
-                      $decalage = 1;
-              }
+        if (date('I', time() + (4 * 60 * 60))) {
+          $decalage = 1;
+        }
       }
     }
 
