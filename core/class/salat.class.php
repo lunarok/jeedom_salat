@@ -20,6 +20,8 @@
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
 class salat extends eqLogic {
+  
+  public static $_widgetPossibility = array('custom' => true);
 
   public static function dependancy_info() {
     $return = array();
