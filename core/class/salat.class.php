@@ -44,30 +44,19 @@ class salat extends eqLogic {
       if (null !== ($salat->getConfiguration('geoloc', ''))) {
         log::add('salat', 'info', 'Calcul des horaires');
         $salat->getInformations();
-        $mc = cache::byKey('salatWidgetdashboard' . $salat->getId());
-        $mc->remove();
-        $salat->toHtml('dashboard');
-        $salat->refreshWidget();
       }
     }
   }
 
-  public static function start($_options) {
+  public static function start() {
     foreach (eqLogic::byType('salat') as $salat) {
       if (null !== ($salat->getConfiguration('geoloc', ''))) {
         log::add('salat', 'info', 'Calcul des horaires');
         $salat->getInformations();
-        $mc = cache::byKey('salatWidgetdashboard' . $salat->getId());
-        $mc->remove();
-        $salat->toHtml('dashboard');
-        $salat->refreshWidget();
       }
     }
 
   }
-
-
-  /*     * *********************Methode d'instance************************* */
 
   public function preUpdate() {
     if ($this->getConfiguration('fajr') == '') {
@@ -315,96 +304,52 @@ class salat extends eqLogic {
   }
 
   public function toHtml($_version = 'dashboard') {
-    $_version = jeedom::versionAlias($_version);
-    $mc = cache::byKey('salatWidget' . $_version . $this->getId());
-    if ($mc->getValue() != '') {
-      return $mc->getValue();
+    $replace = $this->preToHtml($_version);
+    if (!is_array($replace)) {
+      return $replace;
     }
-    $html_salat = '';
-
-    if ($this->getIsEnable() != 1) {
+    $version = jeedom::versionAlias($_version);
+    if ($this->getDisplay('hideOn' . $version) == 1) {
       return '';
     }
-    if (!$this->hasRight('r')) {
-      return '';
-    }
-    $_version = jeedom::versionAlias($_version);
-    if ($this->getDisplay('hideOn' . $_version) == 1) {
-      return '';
-    }
-    $vcolor = 'cmdColor';
-    if ($_version == 'mobile') {
-      $vcolor = 'mcmdColor';
-    }
-    $parameters = $this->getDisplay('parameters');
-    $cmdColor = ($this->getPrimaryCategory() == '') ? '' : jeedom::getConfiguration('eqLogic:category:' . $this->getPrimaryCategory() . ':' . $vcolor);
-    if (is_array($parameters) && isset($parameters['background_cmd_color'])) {
-      $cmdColor = $parameters['background_cmd_color'];
-    }
 
-    if (($_version == 'dview' || $_version == 'mview') && $this->getDisplay('doNotShowNameOnView') == 1) {
-      $replace['#name#'] = '';
-      $replace['#object_name#'] = (is_object($object)) ? $object->getName() : '';
-    }
-    if (($_version == 'mobile' || $_version == 'dashboard') && $this->getDisplay('doNotShowNameOnDashboard') == 1) {
-      $replace['#name#'] = '<br/>';
-      $replace['#object_name#'] = (is_object($object)) ? $object->getName() : '';
-    }
-
-    if (is_array($parameters)) {
-      foreach ($parameters as $key => $value) {
-        $replace['#' . $key . '#'] = $value;
+    foreach ($this->getCmd('info') as $cmd) {
+      $replace['#' . $cmd->getLogicalId() . '_history#'] = '';
+      $replace['#' . $cmd->getLogicalId() . '_id#'] = $cmd->getId();
+      $replace['#' . $cmd->getLogicalId() . '#'] = $cmd->execCmd();
+      $replace['#' . $cmd->getLogicalId() . '_collect#'] = $cmd->getCollectDate();
+      if ($cmd->getIsHistorized() == 1) {
+        $replace['#' . $cmd->getLogicalId() . '_history#'] = 'history cursor';
       }
     }
-    $background=$this->getBackgroundColor($_version);
-    $replace = array(
-      '#name#' => $this->getName(),
-      '#id#' => $this->getId(),
-      '#background_color#' => $background,
-      '#height#' => $this->getDisplay('height', 'auto'),
-      '#width#' => $this->getDisplay('width', '200px'),
-      '#eqLink#' => ($this->hasRight('w')) ? $this->getLinkToConfiguration() : '#',
-    );
 
     $imsak = $this->getCmd(null,'imsak');
     $replace['#imsak#'] = (is_object($imsak)) ? substr_replace($imsak->execCmd(),':',-2,0) : '';
-
     $fajr = $this->getCmd(null,'fajr');
     $replace['#fajr#'] = (is_object($fajr)) ? substr_replace($fajr->execCmd(),':',-2,0) : '';
-
     $shurooq = $this->getCmd(null,'shurooq');
     $replace['#shurooq#'] = (is_object($shurooq)) ? substr_replace($shurooq->execCmd(),':',-2,0) : '';
-
     $dhuhr = $this->getCmd(null,'dhuhr');
     $replace['#dhuhr#'] = (is_object($dhuhr)) ? substr_replace($dhuhr->execCmd(),':',-2,0) : '';
-
     $asr = $this->getCmd(null,'asr');
     $replace['#asr#'] = (is_object($asr)) ? substr_replace($asr->execCmd(),':',-2,0) : '';
-
     $maghrib = $this->getCmd(null,'maghrib');
     $replace['#maghrib#'] = (is_object($maghrib)) ? substr_replace($maghrib->execCmd(),':',-2,0) : '';
-
     $isha = $this->getCmd(null,'isha');
     $replace['#isha#'] = (is_object($isha)) ? substr_replace($isha->execCmd(),':',-2,0) : '';
-
     $imsak1 = $this->getCmd(null,'imsak1');
     $replace['#imsak1#'] = (is_object($imsak1)) ? substr_replace($imsak1->execCmd(),':',-2,0) : '';
-
     $fajr1 = $this->getCmd(null,'fajr1');
     $replace['#fajr1#'] = (is_object($fajr1)) ? substr_replace($fajr1->execCmd(),':',-2,0) : '';
-
     $date = $this->getCmd(null,'date');
     $replace['#date#'] = (is_object($date)) ? $date->execCmd() : '';
-
     $qibla = $this->getCmd(null,'qibla');
     $replace['#qibla#'] = (is_object($qibla)) ? $qibla->execCmd() : '0';
     $replace['#qiblaid#'] = is_object($qibla) ? $qibla->getId() : '';
-
     $event = $this->getCmd(null,'event');
     $replace['#event#'] = (is_object($event)) ? $event->execCmd() : '';
 
     $html_salat = template_replace($replace, getTemplate('core', $_version, 'salat','salat'));
-    cache::set('salatWidget' . $_version . $this->getId(), $html_salat, 0);
     return $html_salat;
   }
 
