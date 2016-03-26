@@ -20,7 +20,7 @@
 require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
 
 class salat extends eqLogic {
-  
+
   public static $_widgetPossibility = array('custom' => true);
 
   public static function dependancy_info() {
@@ -350,6 +350,10 @@ class salat extends eqLogic {
     $replace['#qiblaid#'] = is_object($qibla) ? $qibla->getId() : '';
     $event = $this->getCmd(null,'event');
     $replace['#event#'] = (is_object($event)) ? $event->execCmd() : '';
+    $next = $this->getCmd(null,'nexttime');
+    $replace['#next#'] = (is_object($next)) ? $next->execCmd() : '';
+    $nextt = $this->getCmd(null,'nexttext');
+    $replace['#nextt#'] = (is_object($nextt)) ? $nextt->execCmd() : '';
 
     $html_salat = template_replace($replace, getTemplate('core', $_version, 'salat','salat'));
     return $html_salat;
