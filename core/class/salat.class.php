@@ -41,11 +41,13 @@ class salat extends eqLogic {
     exec($cmd);
   }
 
-  public static function cronDaily() {
-    foreach (eqLogic::byType('salat') as $salat) {
-      if (null !== ($salat->getConfiguration('geoloc', ''))) {
-        log::add('salat', 'info', 'Calcul des horaires');
-        $salat->getInformations();
+  public static function cronHourly() {
+    if (date('G')  == 3) {
+      foreach (eqLogic::byType('salat') as $salat) {
+        if (null !== ($salat->getConfiguration('geoloc', ''))) {
+          log::add('salat', 'info', 'Calcul des horaires');
+          $salat->getInformations();
+        }
       }
     }
   }
@@ -461,43 +463,6 @@ class salat extends eqLogic {
       $event1 = $tEvent1[1];
     }else {
       $event1 = 'Aucun';
-    }
-
-    $decalage = 0;
-    if (date('H')>'2') {
-      if (date('I', time())) {
-        if (!date('I', time() + (4 * 60 * 60))) {
-          $decalage = -1;
-        }
-      }
-      else {
-        if (date('I', time() + (4 * 60 * 60))) {
-          $decalage = 1;
-        }
-      }
-    }
-
-    if ($decalage = "-1") {
-      $imsak = $imsak - 100;
-      $imsak1 = $imsak1 - 100;
-      $fajr = $fajr - 100;
-      $fajr1 = $fajr1 - 100;
-      $shurooq = $shurooq - 100;
-      $dhuhr = $dhuhr - 100;
-      $asr = $asr - 100;
-      $maghrib = $maghrib - 100;
-      $isha = $isha - 100;
-    }
-    if ($decalage = "1") {
-      $imsak = $imsak + 100;
-      $imsak1 = $imsak1 + 100;
-      $fajr = $fajr + 100;
-      $fajr1 = $fajr1 + 100;
-      $shurooq = $shurooq + 100;
-      $dhuhr = $dhuhr + 100;
-      $asr = $asr + 100;
-      $maghrib = $maghrib + 100;
-      $isha = $isha + 100;
     }
 
     log::add('salat', 'info', 'getInformations ' . $imsak . ' ' . $fajr . ' ' . $shurooq . ' ' . $dhuhr . ' ' . $asr . ' ' . $maghrib . ' ' . $isha . ' ' .  $imsak1 . ' ' . $fajr1);
