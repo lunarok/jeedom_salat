@@ -84,7 +84,7 @@ class salat extends eqLogic {
   }
 
   public function postUpdate() {
-    foreach (eqLogic::byType('salat') as $salat) {
+    foreach (eqLogic::byType('salat', true) as $salat) {
       $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'imsak');
       if (!is_object($salatCmd)) {
         $salatCmd = new salatCmd();
@@ -289,6 +289,102 @@ class salat extends eqLogic {
       $salatCmd->setSubType('numeric');
       $salatCmd->save();
 
+      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'muharam');
+      if (!is_object($salatCmd)) {
+        $salatCmd = new salatCmd();
+        $salatCmd->setName(__('Nouvelle Année', __FILE__));
+        $salatCmd->setEqLogic_id($this->id);
+        $salatCmd->setLogicalId('muharam');
+        $salatCmd->setConfiguration('data', 'muharam');
+        $salatCmd->setType('info');
+      }
+      $salatCmd->setSubType('string');
+      $salatCmd->save();
+
+      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'ashura');
+      if (!is_object($salatCmd)) {
+        $salatCmd = new salatCmd();
+        $salatCmd->setName(__('Ashura', __FILE__));
+        $salatCmd->setEqLogic_id($this->id);
+        $salatCmd->setLogicalId('ashura');
+        $salatCmd->setConfiguration('data', 'ashura');
+        $salatCmd->setType('info');
+      }
+      $salatCmd->setSubType('string');
+      $salatCmd->save();
+
+      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'mawlid');
+      if (!is_object($salatCmd)) {
+        $salatCmd = new salatCmd();
+        $salatCmd->setName(__('Mawlid an Nabi', __FILE__));
+        $salatCmd->setEqLogic_id($this->id);
+        $salatCmd->setLogicalId('mawlid');
+        $salatCmd->setConfiguration('data', 'mawlid');
+        $salatCmd->setType('info');
+      }
+      $salatCmd->setSubType('string');
+      $salatCmd->save();
+
+      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'miraj');
+      if (!is_object($salatCmd)) {
+        $salatCmd = new salatCmd();
+        $salatCmd->setName(__('Isra Miraj', __FILE__));
+        $salatCmd->setEqLogic_id($this->id);
+        $salatCmd->setLogicalId('miraj');
+        $salatCmd->setConfiguration('data', 'miraj');
+        $salatCmd->setType('info');
+      }
+      $salatCmd->setSubType('string');
+      $salatCmd->save();
+
+      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'ramadan');
+      if (!is_object($salatCmd)) {
+        $salatCmd = new salatCmd();
+        $salatCmd->setName(__('Début du Ramadan', __FILE__));
+        $salatCmd->setEqLogic_id($this->id);
+        $salatCmd->setLogicalId('ramadan');
+        $salatCmd->setConfiguration('data', 'ramadan');
+        $salatCmd->setType('info');
+      }
+      $salatCmd->setSubType('string');
+      $salatCmd->save();
+
+      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'fitr');
+      if (!is_object($salatCmd)) {
+        $salatCmd = new salatCmd();
+        $salatCmd->setName(__('Aid al Fitr', __FILE__));
+        $salatCmd->setEqLogic_id($this->id);
+        $salatCmd->setLogicalId('fitr');
+        $salatCmd->setConfiguration('data', 'fitr');
+        $salatCmd->setType('info');
+      }
+      $salatCmd->setSubType('string');
+      $salatCmd->save();
+
+      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'arafat');
+      if (!is_object($salatCmd)) {
+        $salatCmd = new salatCmd();
+        $salatCmd->setName(__('Jour d Arafat', __FILE__));
+        $salatCmd->setEqLogic_id($this->id);
+        $salatCmd->setLogicalId('arafat');
+        $salatCmd->setConfiguration('data', 'arafat');
+        $salatCmd->setType('info');
+      }
+      $salatCmd->setSubType('string');
+      $salatCmd->save();
+
+      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'ada');
+      if (!is_object($salatCmd)) {
+        $salatCmd = new salatCmd();
+        $salatCmd->setName(__('Aid al Adha', __FILE__));
+        $salatCmd->setEqLogic_id($this->id);
+        $salatCmd->setLogicalId('ada');
+        $salatCmd->setConfiguration('data', 'ada');
+        $salatCmd->setType('info');
+      }
+      $salatCmd->setSubType('string');
+      $salatCmd->save();
+
       $salat->getInformations();
     }
   }
@@ -452,6 +548,64 @@ class salat extends eqLogic {
     $detail = explode('/', $date);
     $jour = $detail[0];
     $mois = $detail[1];
+    $details = explode(' A.H', $detail[2]);
+    $annee = $details[0];
+    $annee1 = $annee + 1;
+    $compared = $mois . $jour;
+    $date = $annee1 . '0101';
+    exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rmuharam);
+    $muharam = $rmuharam[0];
+    if ($mois == 1 && $jour < 10) {
+      $date = $annee . '0110';
+    } else {
+      $date = $annee1 . '0110';
+    }
+    exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rashura);
+    $ashura = $rashura[0];
+    if ($mois < 3 || ($mois == 3 && $jour < 12)) {
+      $date = $annee . '0312';
+    } else {
+      $date = $annee1 . '0312';
+    }
+    exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rmawlid);
+    $mawlid = $rmawlid[0];
+    if ($mois < 7 || ($mois == 7 && $jour < 27)) {
+      $date = $annee . '0727';
+    } else {
+      $date = $annee1 . '0727';
+    }
+    exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rmiraj);
+    $miraj = $rmiraj[0];
+    if ($mois < 9) {
+      $date = $annee . '0901';
+    } else {
+      $date = $annee1 . '0901';
+    }
+    exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rramadan);
+    $ramadan = $rramadan[0];
+    if ($mois < 10) {
+      $date = $annee . '1001';
+    } else {
+      $date = $annee1 . '1001';
+    }
+    exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rfitr);
+    $fitr = $rfitr[0];
+    log::add('salat', 'info', 'log ' . $fitr);
+    if ($mois < 12 || ($mois == 12 && $jour < 9)) {
+      $date = $annee . '1209';
+    } else {
+      $date = $annee1 . '1209';
+    }
+    exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rarafat);
+    $arafat = $rarafat[0];
+    log::add('salat', 'info', 'log ' . $arafat);
+    if ($mois < 12 || ($mois == 12 && $jour < 10)) {
+      $date = $annee . '1210';
+    } else {
+      $date = $annee1 . '1210';
+    }
+    exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rada);
+    $ada = $rada[0];
 
     $tomorrow = mktime(0, 0, 0, date("m"), date("d")+1, date("y"));
     $tom1 = date("Ymd", $tomorrow);
@@ -603,10 +757,6 @@ class salat extends eqLogic {
         $cmd->setConfiguration('value', $event1);
         $cmd->save();
         $cmd->event($event1);
-      }elseif($cmd->getConfiguration('data')=="event1"){
-        $cmd->setConfiguration('value', $event1);
-        $cmd->save();
-        $cmd->event($event1);
       }elseif($cmd->getConfiguration('data')=="nexttext"){
         $cmd->setConfiguration('value', $nexttext);
         $cmd->save();
@@ -615,7 +765,40 @@ class salat extends eqLogic {
         $cmd->setConfiguration('value', $nexttime);
         $cmd->save();
         $cmd->event($nexttime);
+      }elseif($cmd->getConfiguration('data')=="muharam"){
+        $cmd->setConfiguration('value', $muharam);
+        $cmd->save();
+        $cmd->event($muharam);
+      }elseif($cmd->getConfiguration('data')=="ashura"){
+        $cmd->setConfiguration('value', $ashura);
+        $cmd->save();
+        $cmd->event($ashura);
+      }elseif($cmd->getConfiguration('data')=="mawlid"){
+        $cmd->setConfiguration('value', $mawlid);
+        $cmd->save();
+        $cmd->event($mawlid);
+      }elseif($cmd->getConfiguration('data')=="miraj"){
+        $cmd->setConfiguration('value', $miraj);
+        $cmd->save();
+        $cmd->event($miraj);
+      }elseif($cmd->getConfiguration('data')=="ramadan"){
+        $cmd->setConfiguration('value', $ramadan);
+        $cmd->save();
+        $cmd->event($ramadan);
+      }elseif($cmd->getConfiguration('data')=="fitr"){
+        $cmd->setConfiguration('value', $fitr);
+        $cmd->save();
+        $cmd->event($fitr);
+      }elseif($cmd->getConfiguration('data')=="arafat"){
+        $cmd->setConfiguration('value', $arafat);
+        $cmd->save();
+        $cmd->event($arafat);
+      }elseif($cmd->getConfiguration('data')=="ada"){
+        $cmd->setConfiguration('value', $ada);
+        $cmd->save();
+        $cmd->event($ada);
       }
+      //log::add('salat', 'info', 'values ' . $cmd->getConfiguration('data') . ' ' . $cmd->getConfiguration('value'));
     }
     return ;
   }
@@ -636,13 +819,7 @@ class salat extends eqLogic {
 }
 
 class salatCmd extends cmd {
-  /*     * *************************Attributs****************************** */
 
-
-
-  /*     * ***********************Methode static*************************** */
-
-  /*     * *********************Methode d'instance************************* */
   public function execute($_options = null) {
   }
 
