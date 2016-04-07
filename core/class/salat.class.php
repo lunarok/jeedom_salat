@@ -446,7 +446,7 @@ class salat extends eqLogic {
     $event = $this->getCmd(null,'event');
     $replace['#event#'] = (is_object($event)) ? $event->execCmd() : '';
     $next = $this->getCmd(null,'nexttime');
-    $replace['#next#'] = (is_object($next)) ? $next->execCmd() : '';
+    $replace['#next#'] = (is_object($next)) ? substr_replace($next->execCmd(),':',-2,0) : '';
     $nextt = $this->getCmd(null,'nexttext');
     $replace['#nextt#'] = (is_object($nextt)) ? $nextt->execCmd() : '';
 
