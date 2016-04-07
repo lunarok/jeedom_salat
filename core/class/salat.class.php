@@ -409,9 +409,6 @@ class salat extends eqLogic {
       return $replace;
     }
     $version = jeedom::versionAlias($_version);
-    if ($this->getDisplay('hideOn' . $version) == 1) {
-      return '';
-    }
 
     foreach ($this->getCmd('info') as $cmd) {
       $replace['#' . $cmd->getLogicalId() . '_history#'] = '';
@@ -453,7 +450,8 @@ class salat extends eqLogic {
     $nextt = $this->getCmd(null,'nexttext');
     $replace['#nextt#'] = (is_object($nextt)) ? $nextt->execCmd() : '';
 
-    $html_salat = template_replace($replace, getTemplate('core', $_version, 'salat','salat'));
+    $html_salat = template_replace($replace, getTemplate('core', $version, 'salat','salat'));
+    cache::set('widgetHtml' . $_version . $this->getId(), $html, 0);
     return $html_salat;
   }
 
@@ -536,6 +534,7 @@ class salat extends eqLogic {
 
     exec('idate --simple --latitude ' . $latitude . ' --longitude ' . $longitude . ' -a ' . $method . ' --fajrangle ' . $fajr . ' --ishaangle ' . $isha . ' --dst ' . $dst, $idate);
     $date = $idate[0];
+    $dateday = $date;
 
     if (isset($idate[3])) {
       $iEvent = $idate[3];
@@ -738,9 +737,9 @@ class salat extends eqLogic {
         $cmd->save();
         $cmd->event($qibla);
       }elseif($cmd->getConfiguration('data')=="date"){
-        $cmd->setConfiguration('value', $date);
+        $cmd->setConfiguration('value', $dateday);
         $cmd->save();
-        $cmd->event($date);
+        $cmd->event($dateday);
       }elseif($cmd->getConfiguration('data')=="day"){
         $cmd->setConfiguration('value', $jour);
         $cmd->save();
