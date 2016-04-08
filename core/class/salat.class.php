@@ -454,7 +454,7 @@ class salat extends eqLogic {
     $replace['#nextt#'] = (is_object($nextt)) ? $nextt->execCmd() : '';
 
     $html_salat = template_replace($replace, getTemplate('core', $version, 'salat','salat'));
-    cache::set('widgetHtml' . $_version . $this->getId(), $html, 0);
+    cache::set('widgetHtml' . $_version . $this->getId(), $html_salat, 0);
     return $html_salat;
   }
 
