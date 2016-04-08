@@ -420,6 +420,9 @@ class salat extends eqLogic {
       }
     }
 
+    $collect = $this->getCmd(null, 'imsak');
+    $replace['#collectDate#'] = $collect->getCollectDate();
+
     $imsak = $this->getCmd(null,'imsak');
     $replace['#imsak#'] = (is_object($imsak)) ? substr_replace($imsak->execCmd(),':',-2,0) : '';
     $fajr = $this->getCmd(null,'fajr');
@@ -799,7 +802,7 @@ class salat extends eqLogic {
       }
       //log::add('salat', 'info', 'values ' . $cmd->getConfiguration('data') . ' ' . $cmd->getConfiguration('value'));
     }
-    return ;
+    $this->refreshWidget();
   }
 
   public function getGeoloc($_infos = '') {
