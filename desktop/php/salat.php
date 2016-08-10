@@ -9,7 +9,7 @@ $eqLogics = eqLogic::byType('salat');
 ?>
 
 <div class="row row-overflow">
-  <div class="col-lg-2 col-md-3 col-sm-4">
+  <div class="col-lg-2 col-sm-3 col-sm-4">
     <div class="bs-sidebar">
       <ul id="ul_eqLogic" class="nav nav-list bs-sidenav">
         <a class="btn btn-default eqLogicAction" style="width : 100%;margin-top : 5px;margin-bottom: 5px;" data-action="add"><i class="fa fa-plus-circle"></i> {{Ajouter un équipement}}</a>
@@ -47,25 +47,33 @@ $eqLogics = eqLogic::byType('salat');
     </div>
   </div>
 
-
   <div class="col-lg-10 col-md-9 col-sm-8 eqLogic" style="border-left: solid 1px #EEE; padding-left: 25px;display: none;">
-    <div class="row">
-      <div class="col-sm-6">
+
+    <a class="btn btn-success eqLogicAction pull-right" data-action="save"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>
+    <a class="btn btn-danger eqLogicAction pull-right" data-action="remove"><i class="fa fa-minus-circle"></i> {{Supprimer}}</a>
+
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fa fa-tachometer"></i> {{Equipement}}</a></li>
+      <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-list-alt"></i> {{Commandes}}</a></li>
+    </ul>
+
+    <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
+      <div role="tabpanel" class="tab-pane active" id="eqlogictab">
         <form class="form-horizontal">
           <fieldset>
             <legend><i class="fa fa-arrow-circle-left eqLogicAction cursor" data-action="returnToThumbnailDisplay"></i>  {{Général}}
               <i class='fa fa-cogs eqLogicAction pull-right cursor expertModeVisible' data-action='configure'></i>
             </legend>
             <div class="form-group">
-              <label class="col-md-2 control-label">{{Lieu salat}}</label>
-              <div class="col-md-3">
+              <label class="col-sm-3 control-label">{{Lieu salat}}</label>
+              <div class="col-sm-3">
                 <input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
                 <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement salat}}"/>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-md-2 control-label" >{{Objet parent}}</label>
-              <div class="col-md-3">
+              <label class="col-sm-3 control-label" >{{Objet parent}}</label>
+              <div class="col-sm-3">
                 <select class="form-control eqLogicAttr" data-l1key="object_id">
                   <option value="">{{Aucun}}</option>
                   <?php
@@ -77,8 +85,8 @@ $eqLogics = eqLogic::byType('salat');
               </div>
             </div>
             <div class="form-group">
-              <label class="col-md-2 control-label">{{Catégorie}}</label>
-              <div class="col-md-8">
+              <label class="col-sm-3 control-label">{{Catégorie}}</label>
+              <div class="col-sm-8">
                 <?php
                 foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
                   echo '<label class="checkbox-inline">';
@@ -90,84 +98,80 @@ $eqLogics = eqLogic::byType('salat');
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label" ></label>
-              <div class="col-sm-9">
-                <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-label-text="{{Activer}}" data-l1key="isEnable" checked/>
-                <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-label-text="{{Visible}}" data-l1key="isVisible" checked/>
+              <label class="col-sm-3 control-label" ></label>
+              <div class="col-sm-8">
+                <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked/>{{Activer}}</label>
+                <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible}}</label>
               </div>
             </div>
 
             <div class="form-group">
-              <label class="col-sm-2 control-label">{{Commentaire}}</label>
-              <div class="col-md-8">
+              <label class="col-sm-3 control-label">{{Commentaire}}</label>
+              <div class="col-sm-3">
                 <textarea class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="commentaire" ></textarea>
               </div>
             </div>
 
-          </fieldset>
-
-        </form>
-      </div>
-
-      <div id="infoNode" class="col-sm-6">
-        <form class="form-horizontal">
-          <fieldset>
-            <legend>{{Configuration}}</legend>
-
             <div class="form-group">
-              <label class="col-md-2 control-label">{{Géolocalisation}}</label>
-              <div class="col-md-3">
+              <label class="col-sm-3 control-label">{{Géolocalisation}}</label>
+              <div class="col-sm-3">
                 <select class="form-control eqLogicAttr configuration" id="geoloc" data-l1key="configuration" data-l2key="geoloc">
                   <option value="none">{{Aucun}}</option>
                   <?php
                   if (class_exists('geolocCmd')) {
-                  foreach (eqLogic::byType('geoloc') as $geoloc) {
-                    foreach (geolocCmd::byEqLogicId($geoloc->getId()) as $geoinfo) {
+                    foreach (eqLogic::byType('geoloc') as $geoloc) {
+                      foreach (geolocCmd::byEqLogicId($geoloc->getId()) as $geoinfo) {
                         if ($geoinfo->getConfiguration('mode') == 'fixe' || $geoinfo->getConfiguration('mode') == 'dynamic') {
-                            echo '<option value="' . $geoinfo->getId() . '">' . $geoinfo->getName() . '</option>';
+                          echo '<option value="' . $geoinfo->getId() . '">' . $geoinfo->getName() . '</option>';
                         }
+                      }
                     }
+                  } else {
+                    echo '<option value="">Geoloc absent</option>';
                   }
-                } else {
-                  echo '<option value="">Geoloc absent</option>';
-                }
                   ?>
                 </select>
               </div>
             </div>
 
             <div class="form-group">
-              <label class="col-md-2 control-label">{{Angle Fajr}}</label>
-              <div class="col-md-3">
+              <label class="col-sm-3 control-label">{{Angle Fajr}}</label>
+              <div class="col-sm-3">
                 <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="fajr" placeholder="ex : 12" title="Angle pour le calcul de Fajr (12 pour l'UOIF)"/>
               </div>
+              </div>
 
-              <label class="col-md-2 control-label">{{Angle Isha}}</label>
-              <div class="col-md-3">
+              <div class="form-group">
+              <label class="col-sm-3 control-label">{{Angle Isha}}</label>
+              <div class="col-sm-3">
                 <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="isha" placeholder="ex : 12" title="Angle pour le calcul d'Isha (12 pour l'UOIF)"/>
               </div>
             </div>
 
             <div class="form-group">
-              <label class="col-md-2 control-label">{{Méthode de Calul}}</label>
-              <div class="col-md-3">
+              <label class="col-sm-3 control-label">{{Méthode de Calul}}</label>
+              <div class="col-sm-3">
                 <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="method" placeholder="ex : 2" title="Méthode de calcul tel qu'utilisé par itools"/>
               </div>
+              </div>
 
-              <label class="col-md-2 control-label">{{Madzab}}</label>
-              <div class="col-md-3">
+              <div class="form-group">
+              <label class="col-sm-3 control-label">{{Madzab}}</label>
+              <div class="col-sm-3">
                 <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="madzab" placeholder="ex : 2" title="Madzab utilisé par itools"/>
               </div>
             </div>
 
             <div class="form-group">
-              <label class="col-md-2 control-label">{{Heure d'été}}</label>
-              <div class="col-md-3">
+              <label class="col-sm-3 control-label">{{Heure d'été}}</label>
+              <div class="col-sm-3">
                 <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="dst" placeholder="ex : 0" title="Décalage heure d'été, normalement laisser 0"/>
               </div>
+              </div>
 
-              <label class="col-md-2 control-label">{{Ajustement UOIF}}</label>
-              <div class="col-md-3">
+              <div class="form-group">
+              <label class="col-sm-3 control-label">{{Ajustement UOIF}}</label>
+              <div class="col-sm-3">
                 <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="uoif" placeholder="ex : 1" title="Indiquer 1 pour appliquer les ajustements de l'UOIF"/>
               </div>
             </div>
@@ -175,19 +179,8 @@ $eqLogics = eqLogic::byType('salat');
           </fieldset>
         </form>
       </div>
-    </div>
 
-    <legend>{{Informations}}</legend>
-
-    <form class="form-horizontal">
-              <fieldset>
-                  <div class="form-actions">
-                      <a class="btn btn-danger eqLogicAction" data-action="remove"><i class="fa fa-minus-circle"></i> Supprimer</a>
-                      <a class="btn btn-success eqLogicAction" data-action="save"><i class="fa fa-check-circle"></i> Sauvegarder</a>
-                  </div>
-              </fieldset>
-          </form>
-  <br>
+    <div role="tabpanel" class="tab-pane" id="commandtab">
 
     <table id="table_cmd" class="table table-bordered table-condensed">
       <thead>
@@ -204,17 +197,10 @@ $eqLogics = eqLogic::byType('salat');
       </tbody>
     </table>
 
-    <form class="form-horizontal">
-      <fieldset>
-        <div class="form-actions">
-          <a class="btn btn-danger eqLogicAction" data-action="remove"><i class="fa fa-minus-circle"></i> {{Supprimer}}</a>
-          <a class="btn btn-success eqLogicAction" data-action="save"><i class="fa fa-check-circle"></i> {{Sauvegarder}}</a>
-        </div>
-      </fieldset>
-    </form>
-
   </div>
-</div>
+  </div>
+  </div>
+  </div>
 
 <?php include_file('desktop', 'salat', 'js', 'salat'); ?>
 <?php include_file('core', 'plugin.template', 'js'); ?>
