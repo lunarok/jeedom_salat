@@ -459,9 +459,14 @@ class salat extends eqLogic {
   }
 
   public function getInformations() {
-    $geoloc = $this->getConfiguration('geoloc', '');
+        $geoloc = $this->getConfiguration('geoloc', '');
     $geolocCmd = geolocCmd::byId($geoloc);
-    $geoloctab = explode(',', $geolocCmd->execCmd(null, 0));
+    if ($geolocCmd->getConfiguration('mode') == 'fixe') {
+      $geolocval = $geolocCmd->getConfiguration('coordinate');
+    } else {
+      $geolocval = $geolocCmd->execCmd();
+    }
+    $geoloctab = explode(',', trim($geolocval));
     $latitude = $geoloctab[0];
     $longitude = $geoloctab[1];
     $method = $this->getConfiguration('method', '');
