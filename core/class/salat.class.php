@@ -453,7 +453,7 @@ class salat extends eqLogic {
     $nextt = $this->getCmd(null,'nexttext');
     $replace['#nextt#'] = (is_object($nextt)) ? $nextt->execCmd() : '';
 
-    return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'current', 'salat')));
+    return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'salat', 'salat')));
   }
 
   public function getInformations() {
