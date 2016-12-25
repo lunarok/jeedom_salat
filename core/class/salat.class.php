@@ -83,7 +83,7 @@ class salat extends eqLogic {
     }
   }
 
-  public function checkCmdOk($_id, $_name, $_subtype, $_repeat=false) {
+  public function checkCmdOk($_id, $_name, $_subtype, $_repeat) {
       $salatCmd = salatCmd::byEqLogicIdAndLogicalId($this->getId(),$_id);
       if (!is_object($salatCmd)) {
           log::add('stock', 'debug', 'Création de la commande ' . $_id);
@@ -95,38 +95,38 @@ class salat extends eqLogic {
           $salatCmd->setType('info');
           $salatCmd->setSubType($_subtype);
       }
-      if ($_repeat) {
+      if ($_repeat == 1) {
           $salatCmd->setConfiguration('repeatEventManagement','always');
       }
       $salatCmd->save();
   }
 
   public function postUpdate() {
-      $this->checkCmdOk('imsak', 'Imsak', 'numeric', true);
-      $this->checkCmdOk('fajr', 'Fajr', 'numeric', true);
-      $this->checkCmdOk('shurooq', 'Shurooq', 'numeric', true);
-      $this->checkCmdOk('dhuhr', 'Dhuhr', 'numeric', true);
-      $this->checkCmdOk('asr', 'Asr', 'numeric', true);
-      $this->checkCmdOk('maghrib', 'Maghrib', 'numeric', true);
-      $this->checkCmdOk('isha', 'Isha', 'numeric', true);
-      $this->checkCmdOk('imsak1', 'Imsak +1', 'numeric', true);
-      $this->checkCmdOk('fajr1', 'Fajr +1', 'numeric', true);
-      $this->checkCmdOk('qibla', 'Qibla', 'string');
-      $this->checkCmdOk('date', 'Date', 'string');
-      $this->checkCmdOk('day', 'Jour', 'numeric');
-      $this->checkCmdOk('month', 'Mois', 'numeric');
-      $this->checkCmdOk('event', 'Evènement', 'string');
-      $this->checkCmdOk('event1', 'Evènement +1', 'string');
-      $this->checkCmdOk('nexttext', 'Prochaine Prière', 'string');
-      $this->checkCmdOk('nexttime', 'Prochaine Prière Heure', 'numeric');
-      $this->checkCmdOk('muharam', 'Nouvelle Année', 'string');
-      $this->checkCmdOk('ashura', 'Ashura', 'string');
-      $this->checkCmdOk('mawlid', 'Mawlid an Nabi', 'string');
-      $this->checkCmdOk('miraj', 'Isra Miraj', 'string');
-      $this->checkCmdOk('ramadan', 'Début du Ramadan', 'string');
-      $this->checkCmdOk('fitr', 'Aid al Fitr', 'string');
-      $this->checkCmdOk('arafat', 'Jour Arafat', 'string');
-      $this->checkCmdOk('ada', 'Aid al Adha', 'string');
+      $this->checkCmdOk('imsak', 'Imsak', 'numeric', 1);
+      $this->checkCmdOk('fajr', 'Fajr', 'numeric', 1);
+      $this->checkCmdOk('shurooq', 'Shurooq', 'numeric', 1);
+      $this->checkCmdOk('dhuhr', 'Dhuhr', 'numeric', 1);
+      $this->checkCmdOk('asr', 'Asr', 'numeric', 1);
+      $this->checkCmdOk('maghrib', 'Maghrib', 'numeric', 1);
+      $this->checkCmdOk('isha', 'Isha', 'numeric', 1);
+      $this->checkCmdOk('imsak1', 'Imsak +1', 'numeric', 1);
+      $this->checkCmdOk('fajr1', 'Fajr +1', 'numeric', 1);
+      $this->checkCmdOk('qibla', 'Qibla', 'string', 0);
+      $this->checkCmdOk('date', 'Date', 'string', 0);
+      $this->checkCmdOk('day', 'Jour', 'numeric', 0);
+      $this->checkCmdOk('month', 'Mois', 'numeric', 0);
+      $this->checkCmdOk('event', 'Evènement', 'string', 0);
+      $this->checkCmdOk('event1', 'Evènement +1', 'string', 0);
+      $this->checkCmdOk('nexttext', 'Prochaine Prière', 'string', 0);
+      $this->checkCmdOk('nexttime', 'Prochaine Prière Heure', 'numeric', 0);
+      $this->checkCmdOk('muharam', 'Nouvelle Année', 'string', 0);
+      $this->checkCmdOk('ashura', 'Ashura', 'string', 0);
+      $this->checkCmdOk('mawlid', 'Mawlid an Nabi', 'string', 0);
+      $this->checkCmdOk('miraj', 'Isra Miraj', 'string', 0);
+      $this->checkCmdOk('ramadan', 'Début du Ramadan', 'string', 0);
+      $this->checkCmdOk('fitr', 'Aid al Fitr', 'string', 0);
+      $this->checkCmdOk('arafat', 'Jour Arafat', 'string', 0);
+      $this->checkCmdOk('ada', 'Aid al Adha', 'string', 0);
 
       $this->getInformations();
   }
@@ -299,58 +299,56 @@ class salat extends eqLogic {
     $compared = $result['month'] . $result['day'];
     $date = $annee1 . '0101';
     exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rmuharam);
-    $result['muharam'] = $rmuharam[0];
+    $result['muharam'] = str_replace(' ', '', $rmuharam[0]);
     if ($result['month'] == 1 && $result['day'] < 10) {
       $date = $annee . '0110';
     } else {
       $date = $annee1 . '0110';
     }
     exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rashura);
-    $result['ashura'] = $rashura[0];
+    $result['ashura'] = str_replace(' ', '', $rashura[0]);
     if ($result['month'] < 3 || ($result['month'] == 3 && $result['day'] < 12)) {
       $date = $annee . '0312';
     } else {
       $date = $annee1 . '0312';
     }
     exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rmawlid);
-    $result['mawlid'] = $rmawlid[0];
+    $result['mawlid'] = str_replace(' ', '', $rmawlid[0]);
     if ($result['month'] < 7 || ($result['month'] == 7 && $result['day'] < 27)) {
       $date = $annee . '0727';
     } else {
       $date = $annee1 . '0727';
     }
     exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rmiraj);
-    $result['miraj'] = $rmiraj[0];
+    $result['miraj'] = str_replace(' ', '', $rmiraj[0]);
     if ($result['month'] < 9) {
       $date = $annee . '0901';
     } else {
       $date = $annee1 . '0901';
     }
     exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rramadan);
-    $result['ramadan'] = $rramadan[0];
+    $result['ramadan'] = str_replace(' ', '', $rramadan[0]);
     if ($result['month'] < 10) {
       $date = $annee . '1001';
     } else {
       $date = $annee1 . '1001';
     }
     exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rfitr);
-    $result['fitr'] = $rfitr[0];
-    log::add('salat', 'info', 'log ' . $fitr);
+    $result['fitr'] = str_replace(' ', '', $rfitr[0]);
     if ($result['month'] < 12 || ($result['month'] == 12 && $result['day'] < 9)) {
       $date = $annee . '1209';
     } else {
       $date = $annee1 . '1209';
     }
     exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rarafat);
-    $result['arafat'] = $rarafat[0];
-    log::add('salat', 'info', 'log ' . $arafat);
+    $result['arafat'] = str_replace(' ', '', $rarafat[0]);
     if ($result['month'] < 12 || ($result['month'] == 12 && $result['day'] < 10)) {
       $date = $annee . '1210';
     } else {
       $date = $annee1 . '1210';
     }
     exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rada);
-    $result['ada'] = $rada[0];
+    $result['ada'] = str_replace(' ', '', $rada[0]);
 
     $tomorrow = mktime(0, 0, 0, date("m"), date("d")+1, date("y"));
     $tom1 = date("Ymd", $tomorrow);
