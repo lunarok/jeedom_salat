@@ -83,310 +83,52 @@ class salat extends eqLogic {
     }
   }
 
+  public function checkCmdOk($_id, $_name, $_subtype, $_repeat=false) {
+      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($this->getId(),$_id);
+      if (!is_object($salatCmd)) {
+          log::add('stock', 'debug', 'Création de la commande ' . $_id);
+          $salatCmd = new salatCmd();
+          $salatCmd->setName(__($_name, __FILE__));
+          $salatCmd->setEqLogic_id($this->id);
+          $salatCmd->setEqType('salat');
+          $salatCmd->setLogicalId($_id);
+          $salatCmd->setType('info');
+          $salatCmd->setSubType($_subtype);
+      }
+      if ($_repeat) {
+          $salatCmd->setConfiguration('repeatEventManagement','always');
+      }
+      $salatCmd->save();
+  }
+
   public function postUpdate() {
-    foreach (eqLogic::byType('salat', true) as $salat) {
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'imsak');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Imsak', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('imsak');
-        $salatCmd->setConfiguration('data', 'imsak');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('numeric');
-      $salatCmd->save();
+      $this->checkCmdOk('imsak', 'Imsak', 'numeric', true);
+      $this->checkCmdOk('fajr', 'Fajr', 'numeric', true);
+      $this->checkCmdOk('shurooq', 'Shurooq', 'numeric', true);
+      $this->checkCmdOk('dhuhr', 'Dhuhr', 'numeric', true);
+      $this->checkCmdOk('asr', 'Asr', 'numeric', true);
+      $this->checkCmdOk('maghrib', 'Maghrib', 'numeric', true);
+      $this->checkCmdOk('isha', 'Isha', 'numeric', true);
+      $this->checkCmdOk('imsak1', 'Imsak +1', 'numeric', true);
+      $this->checkCmdOk('fajr1', 'Fajr +1', 'numeric', true);
+      $this->checkCmdOk('qibla', 'Qibla', 'string');
+      $this->checkCmdOk('date', 'Date', 'string');
+      $this->checkCmdOk('day', 'Jour', 'numeric');
+      $this->checkCmdOk('month', 'Mois', 'numeric');
+      $this->checkCmdOk('event', 'Evènement', 'string');
+      $this->checkCmdOk('event1', 'Evènement +1', 'string');
+      $this->checkCmdOk('nexttext', 'Prochaine Prière', 'string');
+      $this->checkCmdOk('nexttime', 'Prochaine Prière Heure', 'numeric');
+      $this->checkCmdOk('muharam', 'Nouvelle Année', 'string');
+      $this->checkCmdOk('ashura', 'Ashura', 'string');
+      $this->checkCmdOk('mawlid', 'Mawlid an Nabi', 'string');
+      $this->checkCmdOk('miraj', 'Isra Miraj', 'string');
+      $this->checkCmdOk('ramadan', 'Début du Ramadan', 'string');
+      $this->checkCmdOk('fitr', 'Aid al Fitr', 'string');
+      $this->checkCmdOk('arafat', 'Jour Arafat', 'string');
+      $this->checkCmdOk('ada', 'Aid al Adha', 'string');
 
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'fajr');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Fajr', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('fajr');
-        $salatCmd->setConfiguration('data', 'fajr');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('numeric');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'shurooq');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Shurooq', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('shurooq');
-        $salatCmd->setConfiguration('data', 'shurooq');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('numeric');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'dhuhr');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Dhuhr', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('dhuhr');
-        $salatCmd->setConfiguration('data', 'dhuhr');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('numeric');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'asr');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Asr', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('asr');
-        $salatCmd->setConfiguration('data', 'asr');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('numeric');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'maghrib');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Maghrib', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('maghrib');
-        $salatCmd->setConfiguration('data', 'maghrib');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('numeric');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'isha');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Isha', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('isha');
-        $salatCmd->setConfiguration('data', 'isha');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('numeric');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'imsak1');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Imsak +1', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('imsak1');
-        $salatCmd->setConfiguration('data', 'imsak1');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('numeric');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'fajr1');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Fajr +1', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('fajr1');
-        $salatCmd->setConfiguration('data', 'fajr1');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('numeric');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'qibla');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Qibla', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('qibla');
-        $salatCmd->setConfiguration('data', 'qibla');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('string');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'date');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Date', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('date');
-        $salatCmd->setConfiguration('data', 'date');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('string');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'day');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Jour', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('day');
-        $salatCmd->setConfiguration('data', 'day');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('numeric');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'month');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Mois', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('month');
-        $salatCmd->setConfiguration('data', 'month');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('numeric');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'event');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Evènement', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('event');
-        $salatCmd->setConfiguration('data', 'event');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('string');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'event1');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Evènement +1', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('event1');
-        $salatCmd->setConfiguration('data', 'event1');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('string');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'nexttext');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Prochaine Prière', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('nexttext');
-        $salatCmd->setConfiguration('data', 'nexttext');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('string');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'nexttime');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Prochaine Prière Heure', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('nexttime');
-        $salatCmd->setConfiguration('data', 'nexttime');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('numeric');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'muharam');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Nouvelle Année', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('muharam');
-        $salatCmd->setConfiguration('data', 'muharam');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('string');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'ashura');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Ashura', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('ashura');
-        $salatCmd->setConfiguration('data', 'ashura');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('string');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'mawlid');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Mawlid an Nabi', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('mawlid');
-        $salatCmd->setConfiguration('data', 'mawlid');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('string');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'miraj');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Isra Miraj', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('miraj');
-        $salatCmd->setConfiguration('data', 'miraj');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('string');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'ramadan');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Début du Ramadan', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('ramadan');
-        $salatCmd->setConfiguration('data', 'ramadan');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('string');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'fitr');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Aid al Fitr', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('fitr');
-        $salatCmd->setConfiguration('data', 'fitr');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('string');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'arafat');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Jour d Arafat', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('arafat');
-        $salatCmd->setConfiguration('data', 'arafat');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('string');
-      $salatCmd->save();
-
-      $salatCmd = salatCmd::byEqLogicIdAndLogicalId($salat->getId(),'ada');
-      if (!is_object($salatCmd)) {
-        $salatCmd = new salatCmd();
-        $salatCmd->setName(__('Aid al Adha', __FILE__));
-        $salatCmd->setEqLogic_id($this->id);
-        $salatCmd->setLogicalId('ada');
-        $salatCmd->setConfiguration('data', 'ada');
-        $salatCmd->setType('info');
-      }
-      $salatCmd->setSubType('string');
-      $salatCmd->save();
-
-      $salat->getInformations();
-    }
+      $this->getInformations();
   }
 
   public static function run($_options) {
@@ -484,22 +226,22 @@ class salat extends eqLogic {
     if ($uoif = "1") {
       $modulo = $fajr % 100;
       if ($modulo < 5) {
-        $fajr = $fajr - 45;
+        $result['fajr'] = $fajr - 45;
       }else {
-        $fajr = $fajr -5;
+        $result['fajr'] = $fajr -5;
       }
     }
-    $shurooq = str_replace(':','',str_replace(' ','',$tSalat[2]));
-    $dhuhr = str_replace(':','',str_replace(' ','',$tSalat[3]));
-    $asr = str_replace(':','',str_replace(' ','',$tSalat[4]));
+    $result['shurooq'] = str_replace(':','',str_replace(' ','',$tSalat[2]));
+    $result['dhuhr'] = str_replace(':','',str_replace(' ','',$tSalat[3]));
+    $result['asr'] = str_replace(':','',str_replace(' ','',$tSalat[4]));
     $maghrib = str_replace(':','',str_replace(' ','',$tSalat[5]));
     //+5mn pour UOIF
     if ($uoif = "1") {
       $modulo = $maghrib % 100;
       if ($modulo > 54) {
-        $maghrib = $maghrib + 45;
+        $result['maghrib'] = $maghrib + 45;
       }else {
-        $maghrib = $maghrib + 5;
+        $result['maghrib'] = $maghrib + 5;
       }
     }
     $isha = str_replace(':','',str_replace(' ','',$tSalat[6]));
@@ -507,18 +249,16 @@ class salat extends eqLogic {
     if ($uoif = "1") {
       $modulo = $isha % 100;
       if ($modulo > 54) {
-        $isha = $isha + 45;
+        $result['isha'] = $isha + 45;
       }else {
-        $isha = $isha + 5;
+        $result['isha'] = $isha + 5;
       }
     }
-    $iImsak = $itools[13];
-    $tImsak = explode(' : ', $iImsak);
-    $imsak = str_replace(':','',str_replace(' ','',$tImsak[1]));
+    $tImsak = explode(' : ', $itools[13]);
+    $result['imsak'] = str_replace(':','',str_replace(' ','',$tImsak[1]));
 
-    $iImsak1 = $itools[14];
-    $tImsak1 = explode(' :  ', $iImsak1);
-    $imsak1 = str_replace(':','',str_replace(' ','',$tImsak1[1]));
+    $tImsak1 = explode(' :  ', $itools[14]);
+    $result['imsak1'] = str_replace(':','',str_replace(' ','',$tImsak1[1]));
 
     $iFajr1 = $itools[15];
     $tFajr1 = explode(' : ', $iFajr1);
@@ -527,90 +267,90 @@ class salat extends eqLogic {
     if ($uoif = "1") {
       $modulo = $fajr1 % 100;
       if ($modulo < 5) {
-        $fajr1 = $fajr1 - 45;
+        $result['fajr1'] = $fajr1 - 45;
       }else {
-        $fajr1 = $fajr1 -5;
+        $result['fajr1'] = $fajr1 -5;
       }
     }
 
     $iQibla = utf8_encode($itools[7]);
     $tQibla = explode(': ', $iQibla);
     $nQibla = explode('°', $tQibla[1]);
-    $qibla = $nQibla[0];
+    $result['qibla'] = $nQibla[0];
 
     exec('idate --simple --latitude ' . $latitude . ' --longitude ' . $longitude . ' -a ' . $method . ' --fajrangle ' . $fajr . ' --ishaangle ' . $isha . ' --dst ' . $dst, $idate);
     $date = $idate[0];
-    $dateday = $date;
+    $result['date'] = $date;
 
     if (isset($idate[3])) {
       $iEvent = $idate[3];
       $tEvent = explode(' : ', $iEvent);
-      $event = $tEvent[1];
+      $result['event'] = $tEvent[1];
     }else {
-      $event = 'Aucun';
+      $result['event'] = 'Aucun';
     }
 
     $detail = explode('/', $date);
-    $jour = $detail[0];
-    $mois = $detail[1];
+    $result['day'] = $detail[0];
+    $result['month'] = $detail[1];
     $details = explode(' A.H', $detail[2]);
     $annee = $details[0];
     $annee1 = $annee + 1;
-    $compared = $mois . $jour;
+    $compared = $result['month'] . $result['day'];
     $date = $annee1 . '0101';
     exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rmuharam);
-    $muharam = $rmuharam[0];
-    if ($mois == 1 && $jour < 10) {
+    $result['muharam'] = $rmuharam[0];
+    if ($result['month'] == 1 && $result['day'] < 10) {
       $date = $annee . '0110';
     } else {
       $date = $annee1 . '0110';
     }
     exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rashura);
-    $ashura = $rashura[0];
-    if ($mois < 3 || ($mois == 3 && $jour < 12)) {
+    $result['ashura'] = $rashura[0];
+    if ($result['month'] < 3 || ($result['month'] == 3 && $result['day'] < 12)) {
       $date = $annee . '0312';
     } else {
       $date = $annee1 . '0312';
     }
     exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rmawlid);
-    $mawlid = $rmawlid[0];
-    if ($mois < 7 || ($mois == 7 && $jour < 27)) {
+    $result['mawlid'] = $rmawlid[0];
+    if ($result['month'] < 7 || ($result['month'] == 7 && $result['day'] < 27)) {
       $date = $annee . '0727';
     } else {
       $date = $annee1 . '0727';
     }
     exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rmiraj);
-    $miraj = $rmiraj[0];
-    if ($mois < 9) {
+    $result['miraj'] = $rmiraj[0];
+    if ($result['month'] < 9) {
       $date = $annee . '0901';
     } else {
       $date = $annee1 . '0901';
     }
     exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rramadan);
-    $ramadan = $rramadan[0];
-    if ($mois < 10) {
+    $result['ramadan'] = $rramadan[0];
+    if ($result['month'] < 10) {
       $date = $annee . '1001';
     } else {
       $date = $annee1 . '1001';
     }
     exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rfitr);
-    $fitr = $rfitr[0];
+    $result['fitr'] = $rfitr[0];
     log::add('salat', 'info', 'log ' . $fitr);
-    if ($mois < 12 || ($mois == 12 && $jour < 9)) {
+    if ($result['month'] < 12 || ($result['month'] == 12 && $result['day'] < 9)) {
       $date = $annee . '1209';
     } else {
       $date = $annee1 . '1209';
     }
     exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rarafat);
-    $arafat = $rarafat[0];
+    $result['arafat'] = $rarafat[0];
     log::add('salat', 'info', 'log ' . $arafat);
-    if ($mois < 12 || ($mois == 12 && $jour < 10)) {
+    if ($result['month'] < 12 || ($result['month'] == 12 && $result['day'] < 10)) {
       $date = $annee . '1210';
     } else {
       $date = $annee1 . '1210';
     }
     exec("idate --hijri $date --simple | awk -F 'A.D' '{print $1}'",$rada);
-    $ada = $rada[0];
+    $result['ada'] = $rada[0];
 
     $tomorrow = mktime(0, 0, 0, date("m"), date("d")+1, date("y"));
     $tom1 = date("Ymd", $tomorrow);
@@ -619,192 +359,99 @@ class salat extends eqLogic {
     if (isset($idate1[3])) {
       $iEvent1 = $idate1[3];
       $tEvent1 = explode(' : ', $iEvent1);
-      $event1 = $tEvent1[1];
+      $result['event1'] = $tEvent1[1];
     }else {
-      $event1 = 'Aucun';
+      $result['event1'] = 'Aucun';
     }
-
-    log::add('salat', 'info', 'getInformations ' . $imsak . ' ' . $fajr . ' ' . $shurooq . ' ' . $dhuhr . ' ' . $asr . ' ' . $maghrib . ' ' . $isha . ' ' .  $imsak1 . ' ' . $fajr1);
-
 
     $actual = date('Hi');
 
-    if (intval($isha) <= $actual) {
-      $nexttime = $fajr1;
-      $nexttext = 'Fajr';
-    } elseif (intval($maghrib) <= $actual) {
-      $nexttime = $isha;
-      $nexttext = 'Isha';
-    } elseif (intval($asr) <= $actual) {
-      $nexttime = $maghrib;
-      $nexttext = 'Maghrib';
-    } elseif (intval($dhuhr) <= $actual) {
-      $nexttime = $asr;
-      $nexttext = 'Asr';
-    } elseif (intval($fajr) <= $actual) {
-      $nexttime = $dhuhr;
-      $nexttext = 'Dhuhr';
+    if (intval($result['isha']) <= $actual) {
+      $result['nexttime'] = $result['fajr1'];
+      $result['nexttext'] = 'Fajr';
+    } elseif (intval($result['maghrib']) <= $actual) {
+      $result['nexttime'] = $result['isha'];
+      $result['nexttext'] = 'Isha';
+    } elseif (intval($result['asr']) <= $actual) {
+      $result['nexttime'] = $result['maghrib'];
+      $result['nexttext'] = 'Maghrib';
+    } elseif (intval($result['dhuhr']) <= $actual) {
+      $result['nexttime'] = $result['asr'];
+      $result['nexttext'] = 'Asr';
+    } elseif (intval($result['fajr']) <= $actual) {
+      $result['nexttime'] = $result['dhuhr'];
+      $result['nexttext'] = 'Dhuhr';
     } else {
-      $nexttime = $fajr;
-      $nexttext = 'Fajr';
+      $result['nexttime'] = $result['fajr'];
+      $result['nexttext'] = 'Fajr';
     }
 
-    log::add('salat', 'debug', 'actual ' . $actual . ' next ' . $nexttime);
+    log::add('salat', 'debug', 'result ' . print_r($result,true));
 
-    foreach ($this->getCmd() as $cmd) {
-      if($cmd->getConfiguration('data')=="imsak"){
-        $cmd->setConfiguration('value', $imsak);
-        $cmd->save();
-        $cmd->event($imsak);
-      }elseif($cmd->getConfiguration('data')=="imsak1"){
-        $cmd->setConfiguration('value', $imsak1);
-        $cmd->save();
-        $cmd->event($imsak1);
-      }elseif($cmd->getConfiguration('data')=="fajr"){
-        $cmd->setConfiguration('value', $fajr);
-        $cmd->save();
-        $cmd->event($fajr);
-        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $dhuhr,'next' => 'Dhuhr'));
-        if (!is_object($cron)) {
-          $cron = new cron();
-          $cron->setClass('salat');
-          $cron->setFunction('run');
-          $cron->setOption(array('salat_id' => intval($this->getId()),'time' => $dhuhr,'next' => 'Dhuhr'));
+    foreach ($this->getCmd('info') as $cmd) {
+        $this->checkAndUpdateCmd($cmd->getLogicalId(), $result[$cmd->getLogicalId()]);
+        if ($cmd->getLogicalId() == 'fajr') {
+            $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $result['dhuhr'],'next' => 'Dhuhr'));
+            if (!is_object($cron)) {
+              $cron = new cron();
+              $cron->setClass('salat');
+              $cron->setFunction('run');
+              $cron->setOption(array('salat_id' => intval($this->getId()),'time' => $result['dhuhr'],'next' => 'Dhuhr'));
+            }
+            $next = strtotime(substr_replace($result['fajr'],':',-2,0));
+            $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
+            $cron->save();
         }
-        $next = strtotime(substr_replace($fajr,':',-2,0));
-        $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
-        $cron->save();
-      }elseif($cmd->getConfiguration('data')=="fajr1"){
-        $cmd->setConfiguration('value', $fajr1);
-        $cmd->save();
-        $cmd->event($fajr1);
-      }elseif($cmd->getConfiguration('data')=="shurooq"){
-        $cmd->setConfiguration('value', $shurooq);
-        $cmd->save();
-        $cmd->event($shurooq);
-      }elseif($cmd->getConfiguration('data')=="dhuhr"){
-        $cmd->setConfiguration('value', $dhuhr);
-        $cmd->save();
-        $cmd->event($dhuhr);
-        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $asr,'next' => 'Asr'));
-        if (!is_object($cron)) {
-          $cron = new cron();
-          $cron->setClass('salat');
-          $cron->setFunction('run');
-          $cron->setOption(array('salat_id' => intval($this->getId()),'time' => $asr,'next' => 'Asr'));
+        if ($cmd->getLogicalId() == 'dhuhr') {
+            $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $result['asr'],'next' => 'Asr'));
+            if (!is_object($cron)) {
+              $cron = new cron();
+              $cron->setClass('salat');
+              $cron->setFunction('run');
+              $cron->setOption(array('salat_id' => intval($this->getId()),'time' => $result['asr'],'next' => 'Asr'));
+            }
+            $next = strtotime(substr_replace($result['dhuhr'],':',-2,0));
+            $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
+            $cron->save();
         }
-        $next = strtotime(substr_replace($dhuhr,':',-2,0));
-        $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
-        $cron->save();
-      }elseif($cmd->getConfiguration('data')=="asr"){
-        $cmd->setConfiguration('value', $asr);
-        $cmd->save();
-        $cmd->event($asr);
-        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $maghrib,'next' => 'Maghrib'));
-        if (!is_object($cron)) {
-          $cron = new cron();
-          $cron->setClass('salat');
-          $cron->setFunction('run');
-          $cron->setOption(array('salat_id' => intval($this->getId()),'time' => $maghrib,'next' => 'Maghrib'));
+        if ($cmd->getLogicalId() == 'asr') {
+            $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $result['maghrib'],'next' => 'Maghrib'));
+            if (!is_object($cron)) {
+              $cron = new cron();
+              $cron->setClass('salat');
+              $cron->setFunction('run');
+              $cron->setOption(array('salat_id' => intval($this->getId()),'time' => $result['maghrib'],'next' => 'Maghrib'));
+            }
+            $next = strtotime(substr_replace($result['asr'],':',-2,0));
+            $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
+            $cron->save();
         }
-        $next = strtotime(substr_replace($asr,':',-2,0));
-        $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
-        $cron->save();
-      }elseif($cmd->getConfiguration('data')=="maghrib"){
-        $cmd->setConfiguration('value', $maghrib);
-        $cmd->save();
-        $cmd->event($maghrib);
-        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $isha,'next' => 'Isha'));
-        if (!is_object($cron)) {
-          $cron = new cron();
-          $cron->setClass('salat');
-          $cron->setFunction('run');
-          $cron->setOption(array('salat_id' => intval($this->getId()),'time' => $isha,'next' => 'Isha'));
+        if ($cmd->getLogicalId() == 'maghrib') {
+            $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $result['isha'],'next' => 'Isha'));
+            if (!is_object($cron)) {
+              $cron = new cron();
+              $cron->setClass('salat');
+              $cron->setFunction('run');
+              $cron->setOption(array('salat_id' => intval($this->getId()),'time' => $result['isha'],'next' => 'Isha'));
+            }
+            $next = strtotime(substr_replace($result['maghrib'],':',-2,0));
+            $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
+            $cron->save();
         }
-        $next = strtotime(substr_replace($maghrib,':',-2,0));
-        $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
-        $cron->save();
-      }elseif($cmd->getConfiguration('data')=="isha"){
-        $cmd->setConfiguration('value', $isha);
-        $cmd->save();
-        $cmd->event($isha);
-        $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $fajr1,'next' => 'Fajr'));
-        if (!is_object($cron)) {
-          $cron = new cron();
-          $cron->setClass('salat');
-          $cron->setFunction('run');
-          $cron->setOption(array('salat_id' => intval($this->getId()),'time' => $fajr1,'next' => 'Fajr'));
+        if ($cmd->getLogicalId() == 'isha') {
+            $cron = cron::byClassAndFunction('salat', 'run', array('salat_id' => intval($this->getId()),'time' => $result['fajr1'],'next' => 'Fajr'));
+            if (!is_object($cron)) {
+              $cron = new cron();
+              $cron->setClass('salat');
+              $cron->setFunction('run');
+              $cron->setOption(array('salat_id' => intval($this->getId()),'time' => $result['fajr1'],'next' => 'Fajr'));
+            }
+            $next = strtotime(substr_replace($isha,':',-2,0));
+            $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
+            $cron->save();
         }
-        $next = strtotime(substr_replace($isha,':',-2,0));
-        $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
-        $cron->save();
-      }elseif($cmd->getConfiguration('data')=="qibla"){
-        $cmd->setConfiguration('value', $qibla);
-        $cmd->save();
-        $cmd->event($qibla);
-      }elseif($cmd->getConfiguration('data')=="date"){
-        $cmd->setConfiguration('value', $dateday);
-        $cmd->save();
-        $cmd->event($dateday);
-      }elseif($cmd->getConfiguration('data')=="day"){
-        $cmd->setConfiguration('value', $jour);
-        $cmd->save();
-        $cmd->event($jour);
-      }elseif($cmd->getConfiguration('data')=="month"){
-        $cmd->setConfiguration('value', $mois);
-        $cmd->save();
-        $cmd->event($mois);
-      }elseif($cmd->getConfiguration('data')=="event"){
-        $cmd->setConfiguration('value', $event);
-        $cmd->save();
-        $cmd->event($event);
-      }elseif($cmd->getConfiguration('data')=="event1"){
-        $cmd->setConfiguration('value', $event1);
-        $cmd->save();
-        $cmd->event($event1);
-      }elseif($cmd->getConfiguration('data')=="nexttext"){
-        $cmd->setConfiguration('value', $nexttext);
-        $cmd->save();
-        $cmd->event($nexttext);
-      }elseif($cmd->getConfiguration('data')=="nexttime"){
-        $cmd->setConfiguration('value', $nexttime);
-        $cmd->save();
-        $cmd->event($nexttime);
-      }elseif($cmd->getConfiguration('data')=="muharam"){
-        $cmd->setConfiguration('value', $muharam);
-        $cmd->save();
-        $cmd->event($muharam);
-      }elseif($cmd->getConfiguration('data')=="ashura"){
-        $cmd->setConfiguration('value', $ashura);
-        $cmd->save();
-        $cmd->event($ashura);
-      }elseif($cmd->getConfiguration('data')=="mawlid"){
-        $cmd->setConfiguration('value', $mawlid);
-        $cmd->save();
-        $cmd->event($mawlid);
-      }elseif($cmd->getConfiguration('data')=="miraj"){
-        $cmd->setConfiguration('value', $miraj);
-        $cmd->save();
-        $cmd->event($miraj);
-      }elseif($cmd->getConfiguration('data')=="ramadan"){
-        $cmd->setConfiguration('value', $ramadan);
-        $cmd->save();
-        $cmd->event($ramadan);
-      }elseif($cmd->getConfiguration('data')=="fitr"){
-        $cmd->setConfiguration('value', $fitr);
-        $cmd->save();
-        $cmd->event($fitr);
-      }elseif($cmd->getConfiguration('data')=="arafat"){
-        $cmd->setConfiguration('value', $arafat);
-        $cmd->save();
-        $cmd->event($arafat);
-      }elseif($cmd->getConfiguration('data')=="ada"){
-        $cmd->setConfiguration('value', $ada);
-        $cmd->save();
-        $cmd->event($ada);
-      }
-      //log::add('salat', 'info', 'values ' . $cmd->getConfiguration('data') . ' ' . $cmd->getConfiguration('value'));
     }
+
     $this->refreshWidget();
   }
 
