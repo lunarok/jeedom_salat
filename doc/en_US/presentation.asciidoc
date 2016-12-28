@@ -1,4 +1,4 @@
-==== Salat, calendrier musulman
+==== Salat, Muslim calendar
 
 The plugin allows to get the following information of a place:
 
