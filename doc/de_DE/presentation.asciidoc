@@ -1,4 +1,4 @@
-==== Salat, calendrier musulman
+==== Salat, muslimischen Kalender
 
 Le plugin permet de récpérer les informations suivantes d'un lieu :
 
