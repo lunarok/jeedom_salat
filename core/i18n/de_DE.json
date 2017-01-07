@@ -21,14 +21,14 @@
         "Angle Isha": "Angle Isha",
         "Méthode de Calul": "Berechnungsmethode",
         "Madzab": "Madzab",
-        "Heure d'été": "Heure d'été",
-        "Ajustement UOIF": "Ajustement UOIF",
-        "Nom": "Nom",
-        "Valeur": "Valeur",
-        "Paramètres": "Paramètres"
+        "Heure d'été": "Sommer-Zeit",
+        "Ajustement UOIF": "UOIF Anpassung",
+        "Nom": "Name",
+        "Valeur": "Wert",
+        "Paramètres": "Parameter"
     },
     "plugins\/salat\/desktop\/js\/salat.js": {
-        "Historiser": "Historiser"
+        "Historiser": "Archivieren"
     },
     "plugins\/salat\/core\/class\/salat.class.php": {
         "L angle fajr ne peut être vide": "L angle fajr ne peut être vide"
