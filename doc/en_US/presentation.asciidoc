@@ -2,7 +2,7 @@
 
 The plugin allows to get the following information of a place:
 
- * Date du jour au calendrier Hijra
+ * Date of the Hijra calendar day
  * Evènement si c'est un jour spécial (Idul, début de l'année ...)
  * Qibla
  * Imsak du jour et du lendemain

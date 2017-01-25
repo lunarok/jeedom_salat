@@ -4,10 +4,10 @@ Das Plugin enthält keine allgemeine Konfiguration.
 
 Il faut ajouter un équipement et saisir les informations de geolocalisation et règles de calcul souhaitées pour obtenir les informations du lieu
 
-Les paramètres disponibles sont :
+Verfügbare Einstellungen sind :
 
- * Latitude
- * Longitude
+ * Breite
+ * Länge
  * Angle Fajr
  * Angle Isha
  * Méthode de calul d'angle
