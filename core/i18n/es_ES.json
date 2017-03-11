@@ -1,36 +1,36 @@
 {
     "plugins\/salat\/desktop\/php\/salat.php": {
-        "Ajouter un équipement": "Ajouter un équipement",
-        "Rechercher": "Rechercher",
-        "Mes salat": "Mes salat",
-        "Sauvegarder": "Sauvegarder",
-        "Supprimer": "Supprimer",
-        "Configuration avancée": "Configuration avancée",
-        "Equipement": "Equipement",
-        "Commandes": "Commandes",
-        "Lieu salat": "Lieu salat",
-        "Nom de l'équipement salat": "Nom de l'équipement salat",
-        "Objet parent": "Objet parent",
-        "Aucun": "Aucun",
-        "Catégorie": "Catégorie",
-        "Activer": "Activer",
+        "Ajouter un équipement": "Agregar un dispositivo",
+        "Rechercher": "Buscar",
+        "Mes salat": "Mis salat",
+        "Sauvegarder": "Salvar",
+        "Supprimer": "Borrar",
+        "Configuration avancée": "Configuración avanzada",
+        "Equipement": "Dispositivo",
+        "Commandes": "Comandos",
+        "Lieu salat": "Lugar salat",
+        "Nom de l'équipement salat": "Nombre del dispositivo salat",
+        "Objet parent": "Objeto padre",
+        "Aucun": "Ninguno",
+        "Catégorie": "Categoría",
+        "Activer": "Activar",
         "Visible": "Visible",
-        "Commentaire": "Commentaire",
-        "Géolocalisation": "Géolocalisation",
-        "Angle Fajr": "Angle Fajr",
-        "Angle Isha": "Angle Isha",
-        "Méthode de Calul": "Méthode de Calul",
+        "Commentaire": "Comentario",
+        "Géolocalisation": "Geolocalización",
+        "Angle Fajr": "Ángulo Fajr",
+        "Angle Isha": "Ángulo Isha",
+        "Méthode de Calul": "Método de Calculo",
         "Madzab": "Madzab",
-        "Heure d'été": "Heure d'été",
-        "Ajustement UOIF": "Ajustement UOIF",
-        "Nom": "Nom",
-        "Valeur": "Valeur",
-        "Paramètres": "Paramètres"
+        "Heure d'été": "Horario de verano",
+        "Ajustement UOIF": "Ajuste UOIF",
+        "Nom": "Nombre",
+        "Valeur": "Valor",
+        "Paramètres": "Parámetros"
     },
     "plugins\/salat\/desktop\/js\/salat.js": {
-        "Historiser": "Historiser"
+        "Historiser": "Historizar"
     },
     "plugins\/salat\/core\/class\/salat.class.php": {
-        "L angle fajr ne peut être vide": "L angle fajr ne peut être vide"
+        "L angle fajr ne peut être vide": "El ángulo farj no puede estar vacío "
     }
 }
