@@ -102,13 +102,6 @@ $eqLogics = eqLogic::byType('salat');
             </div>
 
             <div class="form-group">
-              <label class="col-sm-3 control-label">{{Commentaire}}</label>
-              <div class="col-sm-3">
-                <textarea class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="commentaire" ></textarea>
-              </div>
-            </div>
-
-            <div class="form-group">
               <label class="col-sm-3 control-label">{{Géolocalisation}}</label>
               <div class="col-sm-3">
                 <select class="form-control eqLogicAttr configuration" id="geoloc" data-l1key="configuration" data-l2key="geoloc">
@@ -183,7 +176,6 @@ $eqLogics = eqLogic::byType('salat');
         <tr>
           <th style="width: 50px;">#</th>
           <th style="width: 300px;">{{Nom}}</th>
-          <th style="width: 250px;">{{Valeur}}</th>
           <th style="width: 150px;">{{Paramètres}}</th>
           <th style="width: 50px;"></th>
         </tr>
