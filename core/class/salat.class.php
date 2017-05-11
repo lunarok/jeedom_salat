@@ -113,6 +113,7 @@ class salat extends eqLogic {
       $this->checkCmdOk('fajr1', 'Fajr +1', 'numeric', 1);
       $this->checkCmdOk('qibla', 'Qibla', 'string', 0);
       $this->checkCmdOk('date', 'Date', 'string', 0);
+      $this->checkCmdOk('date1', 'Date', 'string', 0);
       $this->checkCmdOk('day', 'Jour', 'numeric', 0);
       $this->checkCmdOk('month', 'Mois', 'numeric', 0);
       $this->checkCmdOk('event', 'Evènement', 'string', 0);
@@ -353,7 +354,8 @@ class salat extends eqLogic {
     $tomorrow = mktime(0, 0, 0, date("m"), date("d")+1, date("y"));
     $tom1 = date("Ymd", $tomorrow);
     exec('idate --simple --gregorian ' . $tom1 . ' --latitude ' . $latitude . ' --longitude ' . $longitude . ' -a ' . $method . ' --fajrangle ' . $fajr . ' --ishaangle ' . $isha . ' --dst ' . $dst, $idate1);
-
+    $date1 = $idate1[0];
+    $result['date1'] = $date1;
     if (isset($idate1[3])) {
       $iEvent1 = $idate1[3];
       $tEvent1 = explode(' : ', $iEvent1);
