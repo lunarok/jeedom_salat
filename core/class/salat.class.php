@@ -113,7 +113,7 @@ class salat extends eqLogic {
       $this->checkCmdOk('fajr1', 'Fajr +1', 'numeric', 1);
       $this->checkCmdOk('qibla', 'Qibla', 'string', 0);
       $this->checkCmdOk('date', 'Date', 'string', 0);
-      $this->checkCmdOk('date1', 'Date', 'string', 0);
+      $this->checkCmdOk('date1', 'Date +1', 'string', 0);
       $this->checkCmdOk('day', 'Jour', 'numeric', 0);
       $this->checkCmdOk('month', 'Mois', 'numeric', 0);
       $this->checkCmdOk('event', 'Evènement', 'string', 0);
