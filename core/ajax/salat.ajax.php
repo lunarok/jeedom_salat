@@ -24,26 +24,6 @@ try {
     throw new Exception(__('401 - Accès non autorisé', __FILE__));
   }
 
-  if (init('action') == 'getGeoloc') {
-    ajax::success(salat::getGeoloc());
-  }    
-
-  if (init('action') == 'getSalat') {
-    $salat = salat::byId(init('id'));
-    if (!is_object($salat)) {
-      throw new Exception(__('Salat inconnu verifié l\'id', __FILE__));
-    }
-    $return = utils::o2a($salat);
-    $return['cmd'] = array();
-    foreach ($salat->getCmd() as $cmd) {
-      $cmd_info = utils::o2a($cmd);
-      $cmd_info['value'] = $cmd->execCmd(null, 0);
-      $return['cmd'][] = $cmd_info;
-    }
-    ajax::success($return);
-  }
-
-
   throw new Exception(__('Aucune methode correspondante à : ', __FILE__) . init('action'));
   /*     * *********Catch exeption*************** */
 } catch (Exception $e) {

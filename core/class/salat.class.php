@@ -200,12 +200,17 @@ class salat extends eqLogic {
   }
 
   public function getInformations() {
-        $geoloc = $this->getConfiguration('geoloc', '');
-    $geolocCmd = geolocCmd::byId($geoloc);
-    if ($geolocCmd->getConfiguration('mode') == 'fixe') {
-      $geolocval = $geolocCmd->getConfiguration('coordinate');
+    $geoloc = $this->getConfiguration('geoloc', '');
+    if (strrpos('geotrav'),$geoloc) {
+        $geolocEq = geotravCmd::byId(str_replace('geotrav','',$geoloc));
+        $geolocval = $geolocEq('coordinate');
     } else {
-      $geolocval = $geolocCmd->execCmd();
+        $geolocCmd = geolocCmd::byId($geoloc);
+        if ($geolocCmd->getConfiguration('mode') == 'fixe') {
+          $geolocval = $geolocCmd->getConfiguration('coordinate');
+        } else {
+          $geolocval = $geolocCmd->execCmd();
+        }
     }
     $geoloctab = explode(',', trim($geolocval));
     $latitude = $geoloctab[0];
@@ -455,19 +460,6 @@ class salat extends eqLogic {
     $this->refreshWidget();
   }
 
-  public function getGeoloc($_infos = '') {
-    $return = array();
-    foreach (eqLogic::byType('geoloc') as $geoloc) {
-      foreach (geolocCmd::byEqLogicId($geoloc->getId()) as $geoinfo) {
-        if ($geoinfo->getConfiguration('mode') == 'fixe' || $geoinfo->getConfiguration('mode') == 'dynamic') {
-          $return[$geoinfo->getId()] = array(
-            'value' => $geoinfo->getName(),
-          );
-        }
-      }
-    }
-    return $return;
-  }
 }
 
 class salatCmd extends cmd {
