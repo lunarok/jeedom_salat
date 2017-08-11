@@ -274,7 +274,7 @@ class salat extends eqLogic {
     $nQibla = explode('°', $tQibla[1]);
     $result['qibla'] = $nQibla[0];
 
-    exec('idate --simple --latitude ' . $latitude . ' --longitude ' . $longitude . ' -a ' . $method . ' --fajrangle ' . $fajr . ' --ishaangle ' . $isha . ' --dst ' . $dst, $idate);
+    exec('idate --simple --latitude ' . $geoloctab[0] . ' --longitude ' . $geoloctab[1] . ' -a ' . $method . ' --fajrangle ' . $fajr . ' --ishaangle ' . $isha . ' --dst ' . $dst, $idate);
     $date = $idate[0];
     $result['date'] = $date;
 
@@ -348,7 +348,7 @@ class salat extends eqLogic {
 
     $tomorrow = mktime(0, 0, 0, date("m"), date("d")+1, date("y"));
     $tom1 = date("Ymd", $tomorrow);
-    exec('idate --simple --gregorian ' . $tom1 . ' --latitude ' . $latitude . ' --longitude ' . $longitude . ' -a ' . $method . ' --fajrangle ' . $fajr . ' --ishaangle ' . $isha . ' --dst ' . $dst, $idate1);
+    exec('idate --simple --gregorian ' . $tom1 . ' --latitude ' . $geoloctab[0] . ' --longitude ' . $geoloctab[1] . ' -a ' . $method . ' --fajrangle ' . $fajr . ' --ishaangle ' . $isha . ' --dst ' . $dst, $idate1);
     $date1 = $idate1[0];
     $result['date1'] = $date1;
     if (isset($idate1[3])) {
