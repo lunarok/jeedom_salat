@@ -205,8 +205,6 @@ class salat extends eqLogic {
       }
       $geolocval = geotravCmd::byEqLogicIdAndLogicalId($this->getConfiguration('geoloc'),'location:coordinate');
     $geoloctab = explode(',', trim($geolocval));
-    $latitude = $geoloctab[0];
-    $longitude = $geoloctab[1];
     $method = $this->getConfiguration('method', '');
     $madzab = $this->getConfiguration('madzab', '');
     $fajr = $this->getConfiguration('fajr', '');
@@ -214,9 +212,9 @@ class salat extends eqLogic {
     $dst = $this->getConfiguration('dst', '');
     $uoif = $this->getConfiguration('uoif', '');
 
-    log::add('salat', 'debug', 'Configuration : latitude ' . $latitude . ' longitude ' . $longitude . ' methode ' . $method . ' madzab ' . $madzab . ' fajr ' . $fajr . ' isha ' . $isha . ' dst ' . $dst);
+    log::add('salat', 'debug', 'Configuration : coordinate ' . $geolocval . ' methode ' . $method . ' madzab ' . $madzab . ' fajr ' . $fajr . ' isha ' . $isha . ' dst ' . $dst);
 
-    exec('ipraytime --latitude '.escapeshellarg($latitude).' --longitude '.escapeshellarg($longitude).' -a '.escapeshellarg($method).' --fajrangle '.escapeshellarg($fajr).' --ishaangle '.escapeshellarg($isha).' --dst '.escapeshellarg($dst), $itools);
+    exec('ipraytime --latitude '.escapeshellarg($geoloctab[0]).' --longitude '.escapeshellarg($geoloctab[1]).' -a '.escapeshellarg($method).' --fajrangle '.escapeshellarg($fajr).' --ishaangle '.escapeshellarg($isha).' --dst '.escapeshellarg($dst), $itools);
     $iSalat = $itools[11];
     $tSalat = explode('    ', $iSalat);
     $fajr = str_replace(':','',str_replace(' ','',$tSalat[1]));
