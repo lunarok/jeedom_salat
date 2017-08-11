@@ -203,7 +203,7 @@ class salat extends eqLogic {
       if ($this->getConfiguration('geoloc', 'none') == 'none') {
           return;
       }
-      $geolocval = geotravCmd::byEqLogicIdAndLogicalId($this->getConfiguration('geoloc'),'location:coordinate');
+      $geolocval = geotravCmd::byEqLogicIdAndLogicalId($this->getConfiguration('geoloc'),'location:coordinate')->execCmd();
     $geoloctab = explode(',', trim($geolocval));
     $method = $this->getConfiguration('method', '');
     $madzab = $this->getConfiguration('madzab', '');
