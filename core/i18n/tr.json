@@ -1,0 +1,36 @@
+{
+    "plugins\/salat\/desktop\/php\/salat.php": {
+        "Ajouter un équipement": "Ajouter un équipement",
+        "Rechercher": "Rechercher",
+        "Mes salat": "Mes salat",
+        "Sauvegarder": "Sauvegarder",
+        "Supprimer": "Supprimer",
+        "Configuration avancée": "Configuration avancée",
+        "Equipement": "Equipement",
+        "Commandes": "Commandes",
+        "Lieu salat": "Lieu salat",
+        "Nom de l'équipement salat": "Nom de l'équipement salat",
+        "Objet parent": "Objet parent",
+        "Aucun": "Aucun",
+        "Catégorie": "Catégorie",
+        "Activer": "Activer",
+        "Visible": "Visible",
+        "Commentaire": "Commentaire",
+        "Géolocalisation": "Géolocalisation",
+        "Angle Fajr": "Angle Fajr",
+        "Angle Isha": "Angle Isha",
+        "Méthode de Calul": "Méthode de Calul",
+        "Madzab": "Madzab",
+        "Heure d'été": "Heure d'été",
+        "Ajustement UOIF": "Ajustement UOIF",
+        "Nom": "Nom",
+        "Valeur": "Valeur",
+        "Paramètres": "Paramètres"
+    },
+    "plugins\/salat\/desktop\/js\/salat.js": {
+        "Historiser": "Historiser"
+    },
+    "plugins\/salat\/core\/class\/salat.class.php": {
+        "L angle fajr ne peut être vide": "L angle fajr ne peut être vide"
+    }
+}
