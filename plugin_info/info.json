@@ -4,7 +4,7 @@
 	"description" : "Plugin pour calculer les horaires de Salat avec itools. Actuellement les horaires sont récupérés et affichés dans un widget et utilisable en scénario. La qibla, la date et l'évènement du jour quand il y en a un, sont affichés. L'événement du lendemain ainsi que quelques autres informations sont disponibles pour les scénarios uniquement.",
 	"licence" : "AGPL",
 	"author" : "lunarok",
-	"require" : "2.4",
+	"require" : "3.3.24",
 	"category" : "organization",
 	"language" : ["fr_FR","en_US"],
 	"compatibility" : ["miniplus","smart","rpi","docker","diy","mobile"],
