@@ -1,5 +1,0 @@
-[panel,primary]
-.Stützt sich das Plugin auf APIs Dritter ?
---
-Non, le plugin Salat utilise désormais l'outil itools en local pour le calcul des horaires et des évènements.
---
