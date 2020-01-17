@@ -26,7 +26,7 @@ $eqLogics = eqLogic::byType('salat');
     <legend><i class="fas fa-cog"></i>  {{Gestion}}</legend>
     <div class="eqLogicThumbnailContainer logoPrimary">
 
-      <div class="cursor eqLogicAction" data-action="add">
+      <div class="cursor eqLogicAction logoSecondary" data-action="add">
           <i class="fas fa-plus-circle"></i>
           <br/>
         <span>{{Ajouter}}</span>
