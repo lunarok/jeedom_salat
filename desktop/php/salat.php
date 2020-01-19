@@ -115,15 +115,21 @@ $eqLogics = eqLogic::byType('salat');
                             <label class="col-sm-3 control-label">{{Géolocalisation}}</label>
                             <div class="col-sm-3">
                                 <select class="form-control eqLogicAttr configuration" id="geoloc" data-l1key="configuration" data-l2key="geoloc">
-                                    <option value="none">{{Aucun}}</option>
                                     <?php
+                                    $none = 0;
                                     if (class_exists('geotravCmd')) {
                                         foreach (eqLogic::byType('geotrav') as $geoloc) {
                                             if ($geoloc->getConfiguration('type') == 'location') {
+                                                $none = 1;
                                                 echo '<option value="' . $geoloc->getId() . '">' . $geoloc->getName() . '</option>';
                                             }
                                         }
-                                    } else {
+                                    } 
+                                    if ((config::byKey('info::latitude') != '') && (config::byKey('info::longitude') != '') && (config::byKey('info::postalCode') != '') && (config::byKey('info::stateCode') != '')) {
+                                        echo '<option value="jeedom">Configuration Jeedom</option>';
+                                        $none = 1;
+                                    }
+                                    if ($none == 0) {
                                         echo '<option value="">Pas de localisation disponible</option>';
                                     }
                                     ?>
