@@ -203,8 +203,17 @@ class salat extends eqLogic {
       if ($this->getConfiguration('geoloc', 'none') == 'none') {
           return;
       }
-      $geolocval = geotravCmd::byEqLogicIdAndLogicalId($this->getConfiguration('geoloc'),'location:coordinate')->execCmd();
-    $geoloctab = explode(',', trim($geolocval));
+      if ($this->getConfiguration('geoloc') == 'jeedom') {
+            $geoloctab[0] = config::byKey('info::latitude');
+            $geoloctab[1] = config::byKey('info::longitude');
+        } else {
+            $geotrav = eqLogic::byId($this->getConfiguration('geoloc'));
+            if (!(is_object($geotrav) && $geotrav->getEqType_name() == 'geotrav')) {
+                return;
+            }
+            $geolocval = geotravCmd::byEqLogicIdAndLogicalId($this->getConfiguration('geoloc'),'location:coordinate')->execCmd();
+            $geoloctab = explode(',', trim($geolocval));
+        }
     $method = $this->getConfiguration('method', '');
     $madzab = $this->getConfiguration('madzab', '');
     $fajr = $this->getConfiguration('fajr', '');
