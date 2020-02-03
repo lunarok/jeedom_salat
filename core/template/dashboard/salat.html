@@ -1,4 +1,7 @@
-<div class="eqLogic-widget eqLogic allowResize" style="width: 380px;border:#border#;border-radius:#border-radius#;background-color: #background-color#;color: #color#;#style#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" >    <center class="widget-name"><strong><a href="#eqLink#" style="font-size : 1.1em;"> #date# </a></strong></center>
+<div class="eqLogic-widget eqLogic allowResize" style="width: 380px;border:#border#;border-radius:#border-radius#;background-color: #background-color#;color: #color#;#style#" data-eqLogic_id="#id#" data-eqLogic_uid="#uid#" data-version="#version#" >    
+    <center class="widget-name"><a href="#eqLink#" style="font-size : 1.1em;"> #date# </a>
+    <span class="cmd refresh pull-right cursor" data-cmd_id="#refresh#"><i class="fas fa-sync"></i></span>
+    </center>
     <div style="position : relative; left : 15px;" class="tooltips" title="#collectDate#">
         <div class="pull-right" style="margin-right: 20px;margin-top: 0px;">
             <div id="windDirection#id#" style="width: 80px; height: 80px;" class="cmd noRefresh" data-type="info" data-subtype="numeric" data-cmd_id="#qiblaid#"></div>
@@ -39,87 +42,86 @@
     <script>
         if($('#windDirection#id#').html() != undefined){
             new Highcharts.Chart({
-                chart: {
-                    renderTo: 'windDirection#id#',
-                    type: 'gauge',
-                    backgroundColor: 'transparent',
-                    plotBackgroundColor: null,
-                    plotBackgroundImage: null,
-                    plotBorderWidth: 0,
-                    plotShadow: false,
-                    spacingTop: 0,
-                    spacingLeft: 0,
-                    spacingRight: 0,
-                    spacingBottom: 0
-                },
-                title: {
-                    text: null
-                },
-                credits: {
-                    enabled: false
-                },
-                pane: {
-                    startAngle: 0,
-                    endAngle: 360,
-                },
-                exporting : {
-                    enabled: false
-                },
-                plotOptions: {
-                    series: {
-                        dataLabels: {
-                            enabled: false
-                        },
-                        color: '#FFFFFF',
-                    },
-                    gauge: {
-                        dial: {
-                            radius: '90%',
-                            backgroundColor: 'silver',
-                            borderColor: 'silver',
-                            borderWidth: 1,
-                            baseWidth: 6,
-                            topWidth: 1,
-                            baseLength: '75%', // of radius
-                            rearLength: '15%'
-                        },
-                        pivot: {
-                            backgroundColor: 'white',
-                            radius: 0,
-                        }
-                    }
-                },
-                pane: {background: [{backgroundColor: 'transparent'}]},
-                yAxis: {
-                    min: 0,
-                    max: 360,
-                    tickWidth: 2,
-                    tickLength: 10,
-                    tickColor: '#FFFFFF',
-                    tickInterval: 90,
-                    lineColor: '#FFFFFF',
-                    lineWidth: 4,
-                    labels: {
-                        formatter: function () {
-                            if (this.value == 360) {
-                                return '<span style="color : #FFFFFF;font-weight:bold;">N</span>';
-                            } else if (this.value == 90) {
-                                return '<span style="color : #FFFFFF;font-weight:bold;">E</span>';
-                            } else if (this.value == 180) {
-                                return '<span style="color : #FFFFFF;font-weight:bold;">S</span>';
-                            } else if (this.value == 270) {
-                                return '<span style="color : #FFFFFF;font-weight:bold;">W</span>';
-                            }
-                        }
-                    },
-                    title: {
-                        text: null
-                    }},
-                    series: [{
-                        name: 'Qibla',
-                        data: [#qibla#]
-                    }]
-                });
-}
+				chart: {
+					renderTo: 'windDirection#id#',
+					type: 'gauge',
+					backgroundColor: 'transparent',
+					plotBackgroundColor: null,
+					plotBackgroundImage: null,
+					plotBorderWidth: 0,
+					plotShadow: false,
+					spacingTop: 0,
+					spacingLeft: 0,
+					spacingRight: 0,
+					spacingBottom: 0
+				},
+				title: {
+					text: null
+				},
+				credits: {
+					enabled: false
+				},
+				pane: {
+					startAngle: 0,
+					endAngle: 360,
+					background: null
+				},
+				exporting : {
+					enabled: false
+				},
+				plotOptions: {
+					series: {
+						dataLabels: {
+							enabled: false
+						}
+					},
+          gauge: {
+            dial: {
+              backgroundColor: 'red',
+              borderColor: 'red',
+            },
+            pivot: {
+              backgroundColor: 'silver'
+            }
+          }
+				},
+				yAxis: {
+					min: 0,
+					max: 360,
+					tickWidth: 2,
+					tickLength: 10,
+					tickInterval: 90,
+					lineWidth: 4,
+					labels: {
+            distance: -16,
+						formatter: function () {
+							if (this.value == 360) {
+								return '<span style="font-weight:bold;">N</span>';
+							} else if (this.value == 90) {
+								return '<span style="font-weight:bold;">E</span>';
+							} else if (this.value == 180) {
+								return '<span style="font-weight:bold;">S</span>';
+							} else if (this.value == 270) {
+								return '<span style="font-weight:bold;">W</span>';
+							}
+						}
+					},
+					title: {
+						text: null
+					}},
+					series: [{
+						name: 'Qibla',
+						data: [#qibla#]
+					}]
+				});
+			}
+                             
+if ('#refresh#' != ''){
+			$('.eqLogic[data-eqLogic_uid=#uid#] .refresh').on('click', function () {
+				jeedom.cmd.execute({id: '#refresh#'});
+			});
+		}else{
+			$('.eqLogic[data-eqLogic_uid=#uid#] .refresh').remove();
+		}
 </script>
 </div>
