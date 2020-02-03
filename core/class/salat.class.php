@@ -204,6 +204,8 @@ class salat extends eqLogic {
     $replace['#next#'] = (is_object($next)) ? substr_replace($next->execCmd(),':',-2,0) : '';
     $nextt = $this->getCmd(null,'nexttext');
     $replace['#nextt#'] = (is_object($nextt)) ? $nextt->execCmd() : '';
+    $refresh = $this->getCmd(null, 'refresh');
+    $replace['#refresh#'] = is_object($refresh) ? $refresh->getId() : '';
 
     return $this->postToHtml($_version, template_replace($replace, getTemplate('core', $version, 'salat', 'salat')));
   }
@@ -464,8 +466,7 @@ class salat extends eqLogic {
             $cron->save();
         }
     }
-    $refresh = $this->getCmd(null, 'refresh');
-    $replace['#refresh#'] = is_object($refresh) ? $refresh->getId() : '';
+
     $this->refreshWidget();
   }
 
