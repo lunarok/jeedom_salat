@@ -128,7 +128,16 @@ class salat extends eqLogic {
       $this->checkCmdOk('fitr', 'Aid al Fitr', 'string', 0);
       $this->checkCmdOk('arafat', 'Jour Arafat', 'string', 0);
       $this->checkCmdOk('ada', 'Aid al Adha', 'string', 0);
-
+      $darkskyCmd = salatCmd::byEqLogicIdAndLogicalId($this->getId(),'refresh');
+      if (!is_object($darkskyCmd)) {
+          $darkskyCmd = new salatCmd();
+          $darkskyCmd->setName(__('Rafraichir', __FILE__));
+          $darkskyCmd->setEqLogic_id($this->getId());
+          $darkskyCmd->setLogicalId('refresh');
+          $darkskyCmd->setType('action');
+          $darkskyCmd->setSubType('other');
+          $darkskyCmd->save();
+      }
       $this->getInformations();
   }
 
@@ -464,7 +473,11 @@ class salat extends eqLogic {
 class salatCmd extends cmd {
 
   public function execute($_options = null) {
-  }
+        if ($this->getLogicalId() == 'refresh') {
+            $eqLogic = $this->getEqLogic();
+            $eqLogic->getInformations();
+        } 
+    }
 
 }
 
