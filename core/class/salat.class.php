@@ -464,7 +464,8 @@ class salat extends eqLogic {
             $cron->save();
         }
     }
-
+    $refresh = $this->getCmd(null, 'refresh');
+    $replace['#refresh#'] = is_object($refresh) ? $refresh->getId() : '';
     $this->refreshWidget();
   }
 
