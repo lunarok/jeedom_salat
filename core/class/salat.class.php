@@ -415,6 +415,7 @@ class salat extends eqLogic {
             }
             $next = strtotime(substr_replace($result['fajr'],':',-2,0));
             $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
+          $cron->setOnce(1);
             $cron->save();
         }
         if ($cmd->getLogicalId() == 'dhuhr') {
@@ -427,6 +428,7 @@ class salat extends eqLogic {
             }
             $next = strtotime(substr_replace($result['dhuhr'],':',-2,0));
             $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
+          $cron->setOnce(1);
             $cron->save();
         }
         if ($cmd->getLogicalId() == 'asr') {
@@ -439,6 +441,7 @@ class salat extends eqLogic {
             }
             $next = strtotime(substr_replace($result['asr'],':',-2,0));
             $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
+          $cron->setOnce(1);
             $cron->save();
         }
         if ($cmd->getLogicalId() == 'maghrib') {
@@ -451,6 +454,7 @@ class salat extends eqLogic {
             }
             $next = strtotime(substr_replace($result['maghrib'],':',-2,0));
             $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
+          $cron->setOnce(1);
             $cron->save();
         }
         if ($cmd->getLogicalId() == 'isha') {
@@ -463,6 +467,7 @@ class salat extends eqLogic {
             }
             $next = strtotime(substr_replace($isha,':',-2,0));
             $cron->setSchedule(date('i', $next) . ' ' . date('H', $next) . ' ' . date('d', $next) . ' ' . date('m', $next) . ' * ' . date('Y', $next));
+          $cron->setOnce(1);
             $cron->save();
         }
     }
