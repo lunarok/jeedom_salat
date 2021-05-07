@@ -253,7 +253,7 @@ class salat extends eqLogic {
         $result['fajr'] = $fajr -5;
       }
     }
-    $result['sahur'] = strtotime("- " . $this->getConfiguration('sahur', '0'); . " minutes", strtotime(substr_replace($result['fajr'],':',-2,0)));
+    $result['sahur'] = strtotime("- " . $this->getConfiguration('sahur', '0') . " minutes", strtotime(substr_replace($result['fajr'],':',-2,0)));
     $result['shurooq'] = str_replace(':','',str_replace(' ','',$tSalat[2]));
     $result['dhuhr'] = str_replace(':','',str_replace(' ','',$tSalat[3]));
     $result['asr'] = str_replace(':','',str_replace(' ','',$tSalat[4]));
@@ -267,7 +267,7 @@ class salat extends eqLogic {
         $result['maghrib'] = $maghrib + 5;
       }
     }
-    $result['premaghrib'] = strtotime("- " . $this->getConfiguration('premaghrib', '0'); . " minutes", strtotime(substr_replace($result['maghrib'],':',-2,0)));
+    $result['premaghrib'] = strtotime("- " . $this->getConfiguration('premaghrib', '0') . " minutes", strtotime(substr_replace($result['maghrib'],':',-2,0)));
     $isha = str_replace(':','',str_replace(' ','',$tSalat[6]));
     //+5mn pour UOIF
     if ($uoif = "1") {
