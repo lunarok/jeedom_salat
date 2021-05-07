@@ -166,16 +166,23 @@ $eqLogics = eqLogic::byType('salat');
                         </div>
 
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{Heure d'été}}</label>
-                            <div class="col-sm-3">
-                                <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="dst" placeholder="ex : 0" title="Décalage heure d'été, normalement laisser 0"/>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
                             <label class="col-sm-3 control-label">{{Ajustement UOIF}}</label>
                             <div class="col-sm-3">
                                 <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="uoif" placeholder="ex : 1" title="Indiquer 1 pour appliquer les ajustements de l'UOIF"/>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">{{Temps pour le calcul sahur}}</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="sahur" placeholder="ex : 20" title="Indiquer 20 pour 20 minutes avant fajr"/>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">{{Temps pour le calcul premaghrib}}</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="eqLogicAttr configuration form-control" data-l1key="configuration" data-l2key="premaghrib" placeholder="ex : 20" title="Indiquer 20 pour 20 minutes avant maghrib"/>
                             </div>
                         </div>
 
