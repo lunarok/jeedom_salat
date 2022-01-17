@@ -23,24 +23,6 @@ class salat extends eqLogic {
 
   public static $_widgetPossibility = array('custom' => true);
 
-  public static function dependancy_info() {
-    $return = array();
-    $return['log'] = 'salat_itools';
-    $cmd = "dpkg -l | grep itools";
-    exec($cmd, $output, $return_var);
-    if ($output[0] != "") {
-      $return['state'] = 'ok';
-    } else {
-      $return['state'] = 'nok';
-    }
-    return $return;
-  }
-
-  public static function dependancy_install() {
-    $cmd = 'sudo apt-get -y install itools >> ' . log::getPathToLog('salat_itools') . ' 2>&1 &';
-    exec($cmd);
-  }
-
   public static function cronHourly() {
     if (date('G')  == 3) {
       foreach (eqLogic::byType('salat') as $salat) {
