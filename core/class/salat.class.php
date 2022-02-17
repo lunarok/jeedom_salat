@@ -57,9 +57,6 @@ class salat extends eqLogic {
     if ($this->getConfiguration('madzab') == '') {
       throw new Exception(__('Le madzab ne peut être vide',__FILE__));
     }
-    if ($this->getConfiguration('dst') == '') {
-      throw new Exception(__('Le dht ne peut être vide',__FILE__));
-    }
     if ($this->getConfiguration('uoif') == '') {
       throw new Exception(__('UOIF ne peut être vide',__FILE__));
     }
